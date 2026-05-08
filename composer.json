@@ -1,0 +1,35 @@
+{
+    "name": "wsc/wsc-swplugin-frankenphputils",
+    "description": "WSC FrankenPHP Utils - Automatischer Worker-Neustart bei Plugin-Lifecycle-Events",
+    "type": "shopware-platform-plugin",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "web-seo-consulting.eu",
+            "role": "Manufacturer"
+        }
+    ],
+    "require": {
+        "shopware/core": "~6.6.0 || ~6.7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "WSC\\WSC_SWPlugin_FrankenPHPUtils\\": "src/"
+        }
+    },
+    "extra": {
+        "shopware-plugin-class": "WSC\\WSC_SWPlugin_FrankenPHPUtils\\WSC_SWPlugin_FrankenPHPUtils",
+        "label": {
+            "de-DE": "WSC FrankenPHP Utils",
+            "en-GB": "WSC FrankenPHP Utils"
+        },
+        "description": {
+            "de-DE": "Automatischer FrankenPHP Worker-Neustart und Cache-Management bei Plugin-Lifecycle-Events",
+            "en-GB": "Automatic FrankenPHP worker restart and cache management on plugin lifecycle events"
+        },
+        "manufacturerLink": {
+            "de-DE": "https://web-seo-consulting.eu",
+            "en-GB": "https://web-seo-consulting.eu"
+        }
+    }
+}

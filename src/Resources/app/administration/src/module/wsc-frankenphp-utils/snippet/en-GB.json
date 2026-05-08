@@ -1,0 +1,32 @@
+{
+    "wsc-frankenphp-utils": {
+        "title": "WSC FrankenPHP Utils",
+        "description": "FrankenPHP worker management and cache control",
+        "info": "Here you can manually restart FrankenPHP workers, clear the cache or compile themes. These actions are also executed automatically on plugin events (install, update, activate, deactivate, uninstall) depending on your configuration.",
+        "card": {
+            "actions": {
+                "title": "Manual Actions",
+                "description": "Run individual actions manually or use Full Deploy (top right) for everything at once."
+            }
+        },
+        "actions": {
+            "fullDeploy": "Run Full Deploy",
+            "cacheClear": "Clear Cache",
+            "cacheClearHint": "Clears the Shopware cache (bin/console cache:clear)",
+            "themeCompile": "Compile Theme",
+            "themeCompileHint": "Compiles all themes (bin/console theme:compile) – may take a few minutes",
+            "restart": "Restart Workers",
+            "restartHint": "Gracefully restarts FrankenPHP workers via the Caddy Admin API"
+        },
+        "notifications": {
+            "restartSuccess": "FrankenPHP workers restarted successfully",
+            "restartError": "Error restarting FrankenPHP workers – check log for details",
+            "cacheSuccess": "Cache cleared successfully",
+            "cacheError": "Error clearing cache – check log for details",
+            "themeSuccess": "Theme compiled successfully",
+            "themeError": "Error compiling theme – check log for details",
+            "fullDeploySuccess": "Full deploy completed successfully",
+            "fullDeployError": "Full deploy completed with errors – check log for details"
+        }
+    }
+}

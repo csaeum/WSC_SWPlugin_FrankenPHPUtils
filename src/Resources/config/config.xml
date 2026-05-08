@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <!-- ============================================================ -->
+    <!-- FrankenPHP Verbindung -->
+    <!-- ============================================================ -->
+    <card>
+        <title>FrankenPHP Verbindung</title>
+        <title lang="en-GB">FrankenPHP Connection</title>
+
+        <input-field type="text">
+            <name>adminApiUrl</name>
+            <label>Admin API URL</label>
+            <label lang="en-GB">Admin API URL</label>
+            <defaultValue>http://localhost:2019</defaultValue>
+            <helpText>URL zur FrankenPHP Caddy Admin API. Standard: http://localhost:2019</helpText>
+            <helpText lang="en-GB">URL to the FrankenPHP Caddy Admin API. Default: http://localhost:2019</helpText>
+        </input-field>
+
+        <input-field type="int">
+            <name>timeout</name>
+            <label>Timeout (Sekunden)</label>
+            <label lang="en-GB">Timeout (seconds)</label>
+            <defaultValue>5</defaultValue>
+            <helpText>Maximale Wartezeit für den HTTP-Call zur Admin API</helpText>
+            <helpText lang="en-GB">Maximum wait time for the HTTP call to the Admin API</helpText>
+        </input-field>
+    </card>
+
+    <!-- ============================================================ -->
+    <!-- Automatische Aktionen bei Plugin-Events -->
+    <!-- ============================================================ -->
+    <card>
+        <title>Automatische Aktionen bei Plugin-Events</title>
+        <title lang="en-GB">Automatic Actions on Plugin Events</title>
+
+        <input-field type="switch">
+            <name>autoRestartOnPluginEvent</name>
+            <label>Auto-Restart bei Plugin-Events</label>
+            <label lang="en-GB">Auto-restart on plugin events</label>
+            <defaultValue>true</defaultValue>
+            <helpText>FrankenPHP Workers automatisch neu starten nach Install, Update, Activate, Deactivate, Uninstall</helpText>
+            <helpText lang="en-GB">Automatically restart FrankenPHP workers after install, update, activate, deactivate, uninstall</helpText>
+        </input-field>
+
+        <input-field type="switch">
+            <name>autoCacheClearOnPluginEvent</name>
+            <label>Cache automatisch leeren bei Plugin-Events</label>
+            <label lang="en-GB">Auto clear cache on plugin events</label>
+            <defaultValue>true</defaultValue>
+            <helpText>Shopware Cache automatisch leeren nach Plugin-Lifecycle-Events</helpText>
+            <helpText lang="en-GB">Automatically clear Shopware cache after plugin lifecycle events</helpText>
+        </input-field>
+
+        <input-field type="switch">
+            <name>autoThemeCompileOnPluginEvent</name>
+            <label>Theme automatisch kompilieren bei Plugin-Events</label>
+            <label lang="en-GB">Auto compile theme on plugin events</label>
+            <defaultValue>false</defaultValue>
+            <helpText>Achtung: Theme-Kompilierung kann mehrere Minuten dauern und den Request blockieren!</helpText>
+            <helpText lang="en-GB">Warning: Theme compilation can take several minutes and will block the request!</helpText>
+        </input-field>
+    </card>
+
+    <!-- ============================================================ -->
+    <!-- Logging -->
+    <!-- ============================================================ -->
+    <card>
+        <title>Logging</title>
+        <title lang="en-GB">Logging</title>
+
+        <input-field type="switch">
+            <name>enableLogging</name>
+            <label>Logging aktivieren</label>
+            <label lang="en-GB">Enable logging</label>
+            <defaultValue>true</defaultValue>
+            <helpText>Alle Aktionen in das Shopware-Log schreiben (var/log/prod.log)</helpText>
+            <helpText lang="en-GB">Write all actions to the Shopware log (var/log/prod.log)</helpText>
+        </input-field>
+    </card>
+
+</config>

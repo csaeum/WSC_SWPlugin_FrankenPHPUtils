@@ -1,0 +1,32 @@
+{
+    "wsc-frankenphp-utils": {
+        "title": "WSC FrankenPHP Utils",
+        "description": "FrankenPHP Worker-Management und Cache-Steuerung",
+        "info": "Hier kannst du FrankenPHP Worker manuell neu starten, den Cache leeren oder das Theme kompilieren. Diese Aktionen werden bei Plugin-Events (Install, Update, Activate, Deactivate, Uninstall) je nach Konfiguration automatisch ausgeführt.",
+        "card": {
+            "actions": {
+                "title": "Manuelle Aktionen",
+                "description": "Führe einzelne Aktionen manuell aus oder nutze Full-Deploy (oben rechts) für alles auf einmal."
+            }
+        },
+        "actions": {
+            "fullDeploy": "Full-Deploy ausführen",
+            "cacheClear": "Cache leeren",
+            "cacheClearHint": "Leert den Shopware-Cache (bin/console cache:clear)",
+            "themeCompile": "Theme kompilieren",
+            "themeCompileHint": "Kompiliert alle Themes (bin/console theme:compile) – kann einige Minuten dauern",
+            "restart": "Workers neu starten",
+            "restartHint": "Startet FrankenPHP Worker graceful neu über die Caddy Admin API"
+        },
+        "notifications": {
+            "restartSuccess": "FrankenPHP Workers erfolgreich neu gestartet",
+            "restartError": "Fehler beim Neustart der FrankenPHP Workers – Details im Log",
+            "cacheSuccess": "Cache erfolgreich geleert",
+            "cacheError": "Fehler beim Leeren des Caches – Details im Log",
+            "themeSuccess": "Theme erfolgreich kompiliert",
+            "themeError": "Fehler bei der Theme-Kompilierung – Details im Log",
+            "fullDeploySuccess": "Full-Deploy erfolgreich abgeschlossen",
+            "fullDeployError": "Full-Deploy mit Fehlern abgeschlossen – Details im Log"
+        }
+    }
+}

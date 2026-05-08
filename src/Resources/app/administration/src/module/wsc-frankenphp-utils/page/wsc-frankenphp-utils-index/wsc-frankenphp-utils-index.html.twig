@@ -1,0 +1,108 @@
+{% block wsc_frankenphp_utils_index %}
+<sw-page class="wsc-frankenphp-utils-index">
+
+    {% block wsc_frankenphp_utils_index_smart_bar %}
+    <template #smart-bar-header>
+        <h2>{{ $tc('wsc-frankenphp-utils.title') }}</h2>
+    </template>
+    <template #smart-bar-actions>
+        <sw-button
+            variant="primary"
+            :isLoading="isLoadingFullDeploy"
+            :disabled="isLoadingFullDeploy || isLoadingRestart || isLoadingCache || isLoadingTheme"
+            @click="onFullDeploy">
+            {{ $tc('wsc-frankenphp-utils.actions.fullDeploy') }}
+        </sw-button>
+    </template>
+    {% endblock %}
+
+    {% block wsc_frankenphp_utils_index_content %}
+    <template #content>
+        <sw-card-view>
+
+            {% block wsc_frankenphp_utils_index_card_info %}
+            <sw-alert variant="info">
+                {{ $tc('wsc-frankenphp-utils.info') }}
+            </sw-alert>
+            {% endblock %}
+
+            {% block wsc_frankenphp_utils_index_card_result %}
+            <sw-alert
+                v-if="lastResult"
+                :variant="lastResult.success ? 'success' : 'error'"
+                :closable="true"
+                @close="lastResult = null">
+                {{ lastResult.message }}
+                <template v-if="lastResult.results">
+                    <br>
+                    <small>
+                        Cache: {{ lastResult.results.cacheClear ? '✓' : '✗' }} &nbsp;|&nbsp;
+                        Theme: {{ lastResult.results.themeCompile ? '✓' : '✗' }} &nbsp;|&nbsp;
+                        Restart: {{ lastResult.results.restart ? '✓' : '✗' }}
+                    </small>
+                </template>
+            </sw-alert>
+            {% endblock %}
+
+            {% block wsc_frankenphp_utils_index_card_actions %}
+            <sw-card :title="$tc('wsc-frankenphp-utils.card.actions.title')">
+                <p class="wsc-frankenphp-utils__description">
+                    {{ $tc('wsc-frankenphp-utils.card.actions.description') }}
+                </p>
+                <div class="wsc-frankenphp-utils__actions">
+
+                    <div class="wsc-frankenphp-utils__action-item">
+                        <sw-button
+                            variant="ghost"
+                            size="small"
+                            :isLoading="isLoadingCache"
+                            :disabled="isLoadingCache || isLoadingFullDeploy"
+                            @click="onClearCache">
+                            <sw-icon name="regular-sync" small/>
+                            {{ $tc('wsc-frankenphp-utils.actions.cacheClear') }}
+                        </sw-button>
+                        <p class="wsc-frankenphp-utils__action-hint">
+                            {{ $tc('wsc-frankenphp-utils.actions.cacheClearHint') }}
+                        </p>
+                    </div>
+
+                    <div class="wsc-frankenphp-utils__action-item">
+                        <sw-button
+                            variant="ghost"
+                            size="small"
+                            :isLoading="isLoadingTheme"
+                            :disabled="isLoadingTheme || isLoadingFullDeploy"
+                            @click="onCompileTheme">
+                            <sw-icon name="regular-palette" small/>
+                            {{ $tc('wsc-frankenphp-utils.actions.themeCompile') }}
+                        </sw-button>
+                        <p class="wsc-frankenphp-utils__action-hint">
+                            {{ $tc('wsc-frankenphp-utils.actions.themeCompileHint') }}
+                        </p>
+                    </div>
+
+                    <div class="wsc-frankenphp-utils__action-item">
+                        <sw-button
+                            variant="ghost"
+                            size="small"
+                            :isLoading="isLoadingRestart"
+                            :disabled="isLoadingRestart || isLoadingFullDeploy"
+                            @click="onRestartWorkers">
+                            <sw-icon name="regular-power-btn" small/>
+                            {{ $tc('wsc-frankenphp-utils.actions.restart') }}
+                        </sw-button>
+                        <p class="wsc-frankenphp-utils__action-hint">
+                            {{ $tc('wsc-frankenphp-utils.actions.restartHint') }}
+                        </p>
+                    </div>
+
+                </div>
+            </sw-card>
+            {% endblock %}
+
+        </sw-card-view>
+    </template>
+    {% endblock %}
+
+</sw-page>
+{% endblock %}
