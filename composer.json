@@ -20,8 +20,8 @@
     "extra": {
         "shopware-plugin-class": "WSC\\WSC_SWPlugin_FrankenPHPUtils\\WSC_SWPlugin_FrankenPHPUtils",
         "label": {
-            "de-DE": "WSC FrankenPHP Utils",
-            "en-GB": "WSC FrankenPHP Utils"
+            "de-DE": "WSC | FrankenPHP Utils",
+            "en-GB": "WSC | FrankenPHP Utils"
         },
         "description": {
             "de-DE": "Automatischer FrankenPHP Worker-Neustart und Cache-Management bei Plugin-Lifecycle-Events",

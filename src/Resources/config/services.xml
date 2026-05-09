@@ -24,6 +24,14 @@
         </service>
 
         <!-- ============================================================ -->
+        <!-- Console-Command-Subscriber -->
+        <!-- ============================================================ -->
+        <service id="WSC\WSC_SWPlugin_FrankenPHPUtils\Subscriber\ConsoleCommandSubscriber">
+            <argument type="service" id="WSC\WSC_SWPlugin_FrankenPHPUtils\Service\FrankenPHPService"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <!-- ============================================================ -->
         <!-- API Controller -->
         <!-- ============================================================ -->
         <service id="WSC\WSC_SWPlugin_FrankenPHPUtils\Controller\Api\FrankenPHPApiController" public="true">

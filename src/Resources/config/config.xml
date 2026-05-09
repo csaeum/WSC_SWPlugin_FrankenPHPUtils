@@ -14,8 +14,8 @@
             <label>Admin API URL</label>
             <label lang="en-GB">Admin API URL</label>
             <defaultValue>http://localhost:2019</defaultValue>
-            <helpText>URL zur FrankenPHP Caddy Admin API. Standard: http://localhost:2019</helpText>
-            <helpText lang="en-GB">URL to the FrankenPHP Caddy Admin API. Default: http://localhost:2019</helpText>
+            <helpText>URL zur FrankenPHP Caddy Admin API aus Sicht des Shopware/PHP-Prozesses. Gleicher Container: http://localhost:2019. Getrennte Docker-Container: http://&lt;service-name&gt;:2019, z. B. http://craftingbay-sw6-frankenphp-app:2019.</helpText>
+            <helpText lang="en-GB">URL to the FrankenPHP Caddy Admin API from the Shopware/PHP process. Same container: http://localhost:2019. Separate Docker containers: http://&lt;service-name&gt;:2019, e.g. http://craftingbay-sw6-frankenphp-app:2019.</helpText>
         </input-field>
 
         <input-field type="int">
@@ -35,7 +35,7 @@
         <title>Automatische Aktionen bei Plugin-Events</title>
         <title lang="en-GB">Automatic Actions on Plugin Events</title>
 
-        <input-field type="switch">
+        <input-field type="bool">
             <name>autoRestartOnPluginEvent</name>
             <label>Auto-Restart bei Plugin-Events</label>
             <label lang="en-GB">Auto-restart on plugin events</label>
@@ -44,7 +44,7 @@
             <helpText lang="en-GB">Automatically restart FrankenPHP workers after install, update, activate, deactivate, uninstall</helpText>
         </input-field>
 
-        <input-field type="switch">
+        <input-field type="bool">
             <name>autoCacheClearOnPluginEvent</name>
             <label>Cache automatisch leeren bei Plugin-Events</label>
             <label lang="en-GB">Auto clear cache on plugin events</label>
@@ -53,7 +53,7 @@
             <helpText lang="en-GB">Automatically clear Shopware cache after plugin lifecycle events</helpText>
         </input-field>
 
-        <input-field type="switch">
+        <input-field type="bool">
             <name>autoThemeCompileOnPluginEvent</name>
             <label>Theme automatisch kompilieren bei Plugin-Events</label>
             <label lang="en-GB">Auto compile theme on plugin events</label>
@@ -70,7 +70,7 @@
         <title>Logging</title>
         <title lang="en-GB">Logging</title>
 
-        <input-field type="switch">
+        <input-field type="bool">
             <name>enableLogging</name>
             <label>Logging aktivieren</label>
             <label lang="en-GB">Enable logging</label>
