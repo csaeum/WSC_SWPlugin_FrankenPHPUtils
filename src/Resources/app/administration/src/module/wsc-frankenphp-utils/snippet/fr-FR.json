@@ -7,6 +7,9 @@
             "actions": {
                 "title": "Actions manuelles",
                 "description": "Executez des actions individuelles manuellement ou utilisez le deploiement complet (en haut a droite) pour tout lancer en une seule fois."
+            },
+            "status": {
+                "title": "Dernier statut FrankenPHP Utils"
             }
         },
         "actions": {
@@ -24,7 +27,25 @@
         "results": {
             "cache": "Cache",
             "theme": "Theme",
-            "restart": "Redemarrage"
+            "restart": "Redemarrage",
+            "failed": "Erreur"
+        },
+        "status": {
+            "success": "Derniere action reussie",
+            "error": "Derniere action terminee avec des erreurs",
+            "empty": "Aucune action n'a encore ete journalisee par ce plugin.",
+            "action": "Action",
+            "triggeredBy": "Declenche par",
+            "time": "Heure",
+            "results": "Resultat",
+            "errorDetails": "Details de l'erreur",
+            "actions": {
+                "restart": "Redemarrage FrankenPHP",
+                "cacheClearRestart": "Vider le cache + redemarrage",
+                "fullDeploy": "Deploiement complet",
+                "cacheClear": "Vider le cache",
+                "themeCompile": "Compiler le theme"
+            }
         },
         "notifications": {
             "restartSuccess": "Workers FrankenPHP redemarres avec succes",

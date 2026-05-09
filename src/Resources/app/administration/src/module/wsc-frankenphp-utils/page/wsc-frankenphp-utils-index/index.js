@@ -17,7 +17,20 @@ Component.register('wsc-frankenphp-utils-index', {
             isLoadingTheme: false,
             isLoadingFullDeploy: false,
             lastResult: null,
+            lastStatus: null,
+            statusPollInterval: null,
         };
+    },
+
+    created() {
+        this.loadStatus();
+        this.statusPollInterval = window.setInterval(() => this.loadStatus(), 10000);
+    },
+
+    beforeDestroy() {
+        if (this.statusPollInterval) {
+            window.clearInterval(this.statusPollInterval);
+        }
     },
 
     methods: {
@@ -31,6 +44,7 @@ Component.register('wsc-frankenphp-utils-index', {
                 this.showError(this.$tc('wsc-frankenphp-utils.notifications.restartError'));
             } finally {
                 this.isLoadingRestart = false;
+                this.loadStatus();
             }
         },
 
@@ -44,6 +58,7 @@ Component.register('wsc-frankenphp-utils-index', {
                 this.showError(this.$tc('wsc-frankenphp-utils.notifications.cacheError'));
             } finally {
                 this.isLoadingCache = false;
+                this.loadStatus();
             }
         },
 
@@ -57,6 +72,7 @@ Component.register('wsc-frankenphp-utils-index', {
                 this.showError(this.$tc('wsc-frankenphp-utils.notifications.cacheRestartError'));
             } finally {
                 this.isLoadingCacheRestart = false;
+                this.loadStatus();
             }
         },
 
@@ -70,6 +86,7 @@ Component.register('wsc-frankenphp-utils-index', {
                 this.showError(this.$tc('wsc-frankenphp-utils.notifications.themeError'));
             } finally {
                 this.isLoadingTheme = false;
+                this.loadStatus();
             }
         },
 
@@ -83,6 +100,20 @@ Component.register('wsc-frankenphp-utils-index', {
                 this.showError(this.$tc('wsc-frankenphp-utils.notifications.fullDeployError'));
             } finally {
                 this.isLoadingFullDeploy = false;
+                this.loadStatus();
+            }
+        },
+
+        async loadStatus() {
+            try {
+                const token = Shopware.Service('loginService').getToken();
+                const response = await Shopware.Application.getContainer('init').httpClient.get(
+                    '/api/wsc-frankenphp/status',
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                this.lastStatus = response.data.status;
+            } catch (e) {
+                this.lastStatus = null;
             }
         },
 
@@ -97,7 +128,7 @@ Component.register('wsc-frankenphp-utils-index', {
         },
 
         handleResult(data) {
-            const message = data.messageKey ? this.$tc(data.messageKey) : data.message;
+            const message = this.buildResultMessage(data);
 
             if (data.success) {
                 this.createNotificationSuccess({ message });
@@ -106,6 +137,51 @@ Component.register('wsc-frankenphp-utils-index', {
                 this.createNotificationError({ message });
                 this.lastResult = { success: false, message, results: data.results ?? null };
             }
+        },
+
+        buildResultMessage(data) {
+            const message = data.messageKey ? this.$tc(data.messageKey) : data.message;
+            const details = data.results ? this.formatResults(data.results) : '';
+
+            return details ? `${message} (${details})` : message;
+        },
+
+        formatResults(results) {
+            return Object.keys(results).map((key) => {
+                return `${this.getResultLabel(key)}: ${results[key] ? 'OK' : this.$tc('wsc-frankenphp-utils.results.failed')}`;
+            }).join(', ');
+        },
+
+        getResultLabel(key) {
+            const labels = {
+                cacheClear: this.$tc('wsc-frankenphp-utils.results.cache'),
+                themeCompile: this.$tc('wsc-frankenphp-utils.results.theme'),
+                restart: this.$tc('wsc-frankenphp-utils.results.restart'),
+                'cache:clear': this.$tc('wsc-frankenphp-utils.results.cache'),
+                'theme:compile': this.$tc('wsc-frankenphp-utils.results.theme'),
+            };
+
+            return labels[key] ?? key;
+        },
+
+        getStatusActionLabel(action) {
+            const labels = {
+                restart: this.$tc('wsc-frankenphp-utils.status.actions.restart'),
+                cacheClearRestart: this.$tc('wsc-frankenphp-utils.status.actions.cacheClearRestart'),
+                fullDeploy: this.$tc('wsc-frankenphp-utils.status.actions.fullDeploy'),
+                'cache:clear': this.$tc('wsc-frankenphp-utils.status.actions.cacheClear'),
+                'theme:compile': this.$tc('wsc-frankenphp-utils.status.actions.themeCompile'),
+            };
+
+            return labels[action] ?? action;
+        },
+
+        formatStatusTime(value) {
+            if (!value) {
+                return '-';
+            }
+
+            return new Date(value).toLocaleString();
         },
 
         showError(message) {

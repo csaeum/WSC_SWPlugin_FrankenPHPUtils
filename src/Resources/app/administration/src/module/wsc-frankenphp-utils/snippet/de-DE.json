@@ -7,6 +7,9 @@
             "actions": {
                 "title": "Manuelle Aktionen",
                 "description": "Führe einzelne Aktionen manuell aus oder nutze Full-Deploy (oben rechts) für alles auf einmal."
+            },
+            "status": {
+                "title": "Letzter FrankenPHP Utils Status"
             }
         },
         "actions": {
@@ -24,7 +27,25 @@
         "results": {
             "cache": "Cache",
             "theme": "Theme",
-            "restart": "Restart"
+            "restart": "Restart",
+            "failed": "Fehler"
+        },
+        "status": {
+            "success": "Letzte Aktion erfolgreich",
+            "error": "Letzte Aktion mit Fehlern",
+            "empty": "Es wurde noch keine Aktion durch dieses Plugin protokolliert.",
+            "action": "Aktion",
+            "triggeredBy": "Ausgelöst durch",
+            "time": "Zeitpunkt",
+            "results": "Ergebnis",
+            "errorDetails": "Fehlerdetails",
+            "actions": {
+                "restart": "FrankenPHP Restart",
+                "cacheClearRestart": "Cache leeren + Restart",
+                "fullDeploy": "Full-Deploy",
+                "cacheClear": "Cache leeren",
+                "themeCompile": "Theme kompilieren"
+            }
         },
         "notifications": {
             "restartSuccess": "FrankenPHP Workers erfolgreich neu gestartet",

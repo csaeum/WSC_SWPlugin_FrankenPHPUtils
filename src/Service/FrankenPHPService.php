@@ -11,6 +11,7 @@ class FrankenPHPService
 {
     private const CONFIG_PREFIX = 'WSC_SWPlugin_FrankenPHPUtils.config.';
     private const LOG_FILE = 'wsc_swplugin_frankenphputils.log';
+    private const STATUS_FILE = 'wsc_swplugin_frankenphputils_status.json';
 
     public function __construct(
         private readonly SystemConfigService $systemConfig,
@@ -42,6 +43,7 @@ class FrankenPHPService
                     : 'FrankenPHP Worker-Neustart fehlgeschlagen (HTTP ' . $response->getStatusCode() . ')',
                 ['triggered_by' => $triggeredBy, 'url' => $url]
             );
+            $this->writeStatus('restart', $triggeredBy, $success, ['restart' => $success]);
 
             return $success;
         } catch (\Throwable $e) {
@@ -49,6 +51,7 @@ class FrankenPHPService
                 'triggered_by' => $triggeredBy,
                 'url' => $url,
             ]);
+            $this->writeStatus('restart', $triggeredBy, false, ['restart' => false], $e->getMessage());
 
             return false;
         }
@@ -89,6 +92,7 @@ class FrankenPHPService
         $results['restart'] = $this->restartWorkers($triggeredBy);
 
         $this->log('info', 'Full-Deploy abgeschlossen', array_merge($results, ['triggered_by' => $triggeredBy]));
+        $this->writeStatus('fullDeploy', $triggeredBy, !in_array(false, $results, true), $results);
 
         return $results;
     }
@@ -109,8 +113,29 @@ class FrankenPHPService
         $results['restart'] = $this->restartWorkers($triggeredBy);
 
         $this->log('info', 'Cache-Clear und Worker-Restart abgeschlossen', array_merge($results, ['triggered_by' => $triggeredBy]));
+        $this->writeStatus('cacheClearRestart', $triggeredBy, !in_array(false, $results, true), $results);
 
         return $results;
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function getLastStatus(): ?array
+    {
+        $statusPath = $this->getLogDir() . '/' . self::STATUS_FILE;
+        if (!is_file($statusPath)) {
+            return null;
+        }
+
+        $contents = file_get_contents($statusPath);
+        if ($contents === false) {
+            return null;
+        }
+
+        $status = json_decode($contents, true);
+
+        return is_array($status) ? $status : null;
     }
 
     // -------------------------------------------------------------------------
@@ -156,12 +181,14 @@ class FrankenPHPService
                     'output'       => $success ? $process->getOutput() : $process->getErrorOutput(),
                 ]
             );
+            $this->writeStatus($command[0] ?? 'console', $triggeredBy, $success, [$command[0] ?? 'console' => $success]);
 
             return $success;
         } catch (\Throwable $e) {
             $this->log('error', 'Konsolenbefehl Exception: ' . implode(' ', $command) . ' – ' . $e->getMessage(), [
                 'triggered_by' => $triggeredBy,
             ]);
+            $this->writeStatus($command[0] ?? 'console', $triggeredBy, false, [$command[0] ?? 'console' => false], $e->getMessage());
 
             return false;
         }
@@ -194,7 +221,7 @@ class FrankenPHPService
 
     private function writePluginLog(string $level, string $message, array $context = []): void
     {
-        $logDir = $this->projectDir . '/var/log';
+        $logDir = $this->getLogDir();
         if (!is_dir($logDir) && !@mkdir($logDir, 0775, true) && !is_dir($logDir)) {
             return;
         }
@@ -210,6 +237,34 @@ class FrankenPHPService
         );
 
         @file_put_contents($logDir . '/' . self::LOG_FILE, $line, FILE_APPEND | LOCK_EX);
+    }
+
+    private function writeStatus(string $action, string $triggeredBy, bool $success, array $results = [], ?string $error = null): void
+    {
+        $logDir = $this->getLogDir();
+        if (!is_dir($logDir) && !@mkdir($logDir, 0775, true) && !is_dir($logDir)) {
+            return;
+        }
+
+        $status = [
+            'createdAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
+            'action' => $action,
+            'triggeredBy' => $triggeredBy,
+            'success' => $success,
+            'results' => $results,
+            'error' => $error,
+        ];
+
+        @file_put_contents(
+            $logDir . '/' . self::STATUS_FILE,
+            json_encode($status, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+            LOCK_EX
+        );
+    }
+
+    private function getLogDir(): string
+    {
+        return $this->projectDir . '/var/log';
     }
 
     private function getConfig(string $key, mixed $default = null): mixed

@@ -7,6 +7,9 @@
             "actions": {
                 "title": "Manual Actions",
                 "description": "Run individual actions manually or use Full Deploy (top right) for everything at once."
+            },
+            "status": {
+                "title": "Latest FrankenPHP Utils status"
             }
         },
         "actions": {
@@ -24,7 +27,25 @@
         "results": {
             "cache": "Cache",
             "theme": "Theme",
-            "restart": "Restart"
+            "restart": "Restart",
+            "failed": "Failed"
+        },
+        "status": {
+            "success": "Last action successful",
+            "error": "Last action completed with errors",
+            "empty": "No action has been logged by this plugin yet.",
+            "action": "Action",
+            "triggeredBy": "Triggered by",
+            "time": "Time",
+            "results": "Result",
+            "errorDetails": "Error details",
+            "actions": {
+                "restart": "FrankenPHP restart",
+                "cacheClearRestart": "Clear cache + restart",
+                "fullDeploy": "Full deploy",
+                "cacheClear": "Clear cache",
+                "themeCompile": "Compile theme"
+            }
         },
         "notifications": {
             "restartSuccess": "FrankenPHP workers restarted successfully",

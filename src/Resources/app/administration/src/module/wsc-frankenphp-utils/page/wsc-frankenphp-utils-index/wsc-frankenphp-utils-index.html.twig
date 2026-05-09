@@ -35,6 +35,33 @@
             </sw-alert>
             {% endblock %}
 
+            {% block wsc_frankenphp_utils_index_card_status %}
+            <sw-card :title="$tc('wsc-frankenphp-utils.card.status.title')">
+                <sw-alert
+                    v-if="lastStatus"
+                    :variant="lastStatus.success ? 'success' : 'error'">
+                    <strong>{{ lastStatus.success ? $tc('wsc-frankenphp-utils.status.success') : $tc('wsc-frankenphp-utils.status.error') }}</strong>
+                    <br>
+                    {{ $tc('wsc-frankenphp-utils.status.action') }}: {{ getStatusActionLabel(lastStatus.action) }}
+                    <br>
+                    {{ $tc('wsc-frankenphp-utils.status.triggeredBy') }}: {{ lastStatus.triggeredBy }}
+                    <br>
+                    {{ $tc('wsc-frankenphp-utils.status.time') }}: {{ formatStatusTime(lastStatus.createdAt) }}
+                    <template v-if="lastStatus.results">
+                        <br>
+                        {{ $tc('wsc-frankenphp-utils.status.results') }}: {{ formatResults(lastStatus.results) }}
+                    </template>
+                    <template v-if="lastStatus.error">
+                        <br>
+                        {{ $tc('wsc-frankenphp-utils.status.errorDetails') }}: {{ lastStatus.error }}
+                    </template>
+                </sw-alert>
+                <sw-alert v-else variant="info">
+                    {{ $tc('wsc-frankenphp-utils.status.empty') }}
+                </sw-alert>
+            </sw-card>
+            {% endblock %}
+
             {% block wsc_frankenphp_utils_index_card_result %}
             <sw-alert
                 v-if="lastResult"

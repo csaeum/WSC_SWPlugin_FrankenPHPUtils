@@ -37,6 +37,22 @@ class FrankenPHPApiController extends AbstractController
     }
 
     /**
+     * Gibt den letzten FrankenPHP Utils Status zurueck.
+     */
+    #[Route(
+        path: '/api/wsc-frankenphp/status',
+        name: 'api.wsc_frankenphp.status',
+        methods: ['GET']
+    )]
+    public function status(Context $context): JsonResponse
+    {
+        return new JsonResponse([
+            'success' => true,
+            'status' => $this->frankenPHPService->getLastStatus(),
+        ]);
+    }
+
+    /**
      * Leert den Shopware Cache.
      */
     #[Route(
