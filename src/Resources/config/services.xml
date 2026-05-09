@@ -36,6 +36,7 @@
         <!-- ============================================================ -->
         <service id="WSC\WSC_SWPlugin_FrankenPHPUtils\Controller\Api\FrankenPHPApiController" public="true">
             <argument type="service" id="WSC\WSC_SWPlugin_FrankenPHPUtils\Service\FrankenPHPService"/>
+            <tag name="controller.service_arguments"/>
         </service>
 
     </services>

@@ -1,7 +1,7 @@
 {
     "name": "wsc/wsc-swplugin-frankenphputils",
     "description": "WSC FrankenPHP Utils - Automatischer Worker-Neustart bei Plugin-Lifecycle-Events",
-    "version": "0.9.12",
+    "version": "0.9.13",
     "type": "shopware-platform-plugin",
     "license": "MIT",
     "authors": [
