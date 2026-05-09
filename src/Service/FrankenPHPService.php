@@ -197,26 +197,20 @@ class FrankenPHPService
 
     /**
      * FrankenPHP exposes console execution through "frankenphp php-cli" instead of a plain php binary.
-     * In worker mode PHP_BINARY may be empty — fall back to /proc/self/exe (Linux) or "php".
+     * In worker mode PHP_BINARY is empty — detect FrankenPHP by checking the empty binary constant
+     * and fall back to calling "frankenphp" directly (resolved from PATH by Symfony Process).
      *
      * @return list<string>
      */
     private function getConsoleCommandPrefix(string $consolePath): array
     {
-        $phpBinary = PHP_BINARY !== '' ? PHP_BINARY : $this->detectPhpBinary();
+        $phpBinary = PHP_BINARY;
 
-        if (str_contains(basename($phpBinary), 'frankenphp')) {
-            return [$phpBinary, 'php-cli', $consolePath];
+        if ($phpBinary === '' || str_contains(basename($phpBinary), 'frankenphp')) {
+            return ['frankenphp', 'php-cli', $consolePath];
         }
 
         return [$phpBinary, $consolePath];
-    }
-
-    private function detectPhpBinary(): string
-    {
-        $selfExe = @realpath('/proc/self/exe');
-
-        return ($selfExe !== false && $selfExe !== '') ? $selfExe : 'php';
     }
 
     private function log(string $level, string $message, array $context = []): void
