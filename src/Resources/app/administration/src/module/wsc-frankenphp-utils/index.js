@@ -1,6 +1,7 @@
 import './page/wsc-frankenphp-utils-index';
 import deDE from './snippet/de-DE.json';
 import enGB from './snippet/en-GB.json';
+import frFR from './snippet/fr-FR.json';
 
 const { Module } = Shopware;
 
@@ -15,6 +16,7 @@ Module.register('wsc-frankenphp-utils', {
     snippets: {
         'de-DE': deDE,
         'en-GB': enGB,
+        'fr-FR': frFR,
     },
 
     routes: {

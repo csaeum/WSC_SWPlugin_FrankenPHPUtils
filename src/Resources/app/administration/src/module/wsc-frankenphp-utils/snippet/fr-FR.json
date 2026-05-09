@@ -1,0 +1,32 @@
+{
+    "wsc-frankenphp-utils": {
+        "title": "WSC FrankenPHP Utils",
+        "description": "Gestion des workers FrankenPHP et du cache",
+        "info": "Ici, vous pouvez redemarrer manuellement les workers FrankenPHP, vider le cache ou compiler les themes. Ces actions sont egalement executees automatiquement lors des evenements de plugins (installation, mise a jour, activation, desactivation, desinstallation), selon votre configuration.",
+        "card": {
+            "actions": {
+                "title": "Actions manuelles",
+                "description": "Executez des actions individuelles manuellement ou utilisez le deploiement complet (en haut a droite) pour tout lancer en une seule fois."
+            }
+        },
+        "actions": {
+            "fullDeploy": "Executer le deploiement complet",
+            "cacheClear": "Vider le cache",
+            "cacheClearHint": "Vide le cache Shopware (bin/console cache:clear)",
+            "themeCompile": "Compiler le theme",
+            "themeCompileHint": "Compile tous les themes (bin/console theme:compile) - peut prendre quelques minutes",
+            "restart": "Redemarrer les workers",
+            "restartHint": "Redemarre proprement les workers FrankenPHP via l'API d'administration Caddy"
+        },
+        "notifications": {
+            "restartSuccess": "Workers FrankenPHP redemarres avec succes",
+            "restartError": "Erreur lors du redemarrage des workers FrankenPHP - consultez le journal pour plus de details",
+            "cacheSuccess": "Cache vide avec succes",
+            "cacheError": "Erreur lors du vidage du cache - consultez le journal pour plus de details",
+            "themeSuccess": "Theme compile avec succes",
+            "themeError": "Erreur lors de la compilation du theme - consultez le journal pour plus de details",
+            "fullDeploySuccess": "Deploiement complet termine avec succes",
+            "fullDeployError": "Deploiement complet termine avec des erreurs - consultez le journal pour plus de details"
+        }
+    }
+}

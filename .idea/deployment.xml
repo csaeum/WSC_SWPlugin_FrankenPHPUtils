@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="Live-CraftingBay" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="Live-CraftingBay">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/craftingbay-sw6-frankenphp/volumes/html/custom/plugins/WSC_SWPlugin_FrankenPHPUtils" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

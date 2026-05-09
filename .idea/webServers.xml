@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="81b0f52b-0102-4fb9-b22e-bc60d6407df6" name="Live-CraftingBay">
+        <fileTransfer rootFolder="/home/dockeradmin/docker-stacks" accessType="SFTP" host="server-erde.web-seo-consulting.eu" port="22" sshConfigId="09adbb0f-c207-48b5-8dba-107d7b5c7571" sshConfig="Mein - Erde Hetzner" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
