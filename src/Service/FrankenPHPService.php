@@ -32,7 +32,7 @@ class FrankenPHPService
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-            curl_exec($ch);
+            $responseBody = (string) curl_exec($ch);
             $statusCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $curlError = curl_error($ch);
             curl_close($ch);
@@ -48,7 +48,7 @@ class FrankenPHPService
                 $success
                     ? 'FrankenPHP Workers erfolgreich neu gestartet'
                     : 'FrankenPHP Worker-Neustart fehlgeschlagen (HTTP ' . $statusCode . ')',
-                ['triggered_by' => $triggeredBy, 'url' => $url]
+                ['triggered_by' => $triggeredBy, 'url' => $url, 'http_status' => $statusCode, 'response' => $responseBody]
             );
             $this->writeStatus('restart', $triggeredBy, $success, ['restart' => $success]);
 
