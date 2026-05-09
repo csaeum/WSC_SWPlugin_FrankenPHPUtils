@@ -11,6 +11,7 @@ class ConsoleCommandSubscriber implements EventSubscriberInterface
 {
     private const WATCHED_COMMANDS = [
         'cache:clear',
+        'cache:warmup',
         'theme:compile',
     ];
 
@@ -32,15 +33,14 @@ class ConsoleCommandSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if ($event->getExitCode() !== 0) {
-            return;
-        }
-
         $commandName = $event->getCommand()?->getName();
         if ($commandName === null || !in_array($commandName, self::WATCHED_COMMANDS, true)) {
             return;
         }
 
+        // Restart regardless of exit code: in FrankenPHP worker mode, OPcache may hold
+        // file handles during cache:clear causing non-zero exit even on success.
+        // A worker restart is always safe after any cache operation.
         $this->frankenPHPService->restartWorkers('console_command:' . $commandName);
     }
 }
