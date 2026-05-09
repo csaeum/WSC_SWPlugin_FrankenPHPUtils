@@ -10,7 +10,6 @@
         <!-- ============================================================ -->
         <service id="WSC\WSC_SWPlugin_FrankenPHPUtils\Service\FrankenPHPService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
-            <argument type="service" id="Symfony\Contracts\HttpClient\HttpClientInterface"/>
             <argument type="service" id="logger"/>
             <argument>%kernel.project_dir%</argument>
         </service>

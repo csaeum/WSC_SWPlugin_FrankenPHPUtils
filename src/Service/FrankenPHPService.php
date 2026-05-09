@@ -5,7 +5,6 @@ namespace WSC\WSC_SWPlugin_FrankenPHPUtils\Service;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Process\Process;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class FrankenPHPService
 {
@@ -15,14 +14,13 @@ class FrankenPHPService
 
     public function __construct(
         private readonly SystemConfigService $systemConfig,
-        private readonly HttpClientInterface $httpClient,
         private readonly LoggerInterface $logger,
         private readonly string $projectDir,
     ) {
     }
 
     /**
-     * Startet alle FrankenPHP Worker graceful neu über die Caddy Admin API.
+     * Startet alle FrankenPHP Worker graceful neu über die Caddy Admin API (natives curl).
      */
     public function restartWorkers(string $triggeredBy = 'manual'): bool
     {
@@ -30,17 +28,26 @@ class FrankenPHPService
         $timeout = (int) $this->getConfig('timeout', 5);
 
         try {
-            $response = $this->httpClient->request('POST', $url . '/frankenphp/workers/restart', [
-                'timeout' => $timeout,
-            ]);
+            $ch = curl_init($url . '/frankenphp/workers/restart');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+            curl_exec($ch);
+            $statusCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $curlError = curl_error($ch);
+            curl_close($ch);
 
-            $success = $response->getStatusCode() === 200;
+            if ($curlError !== '') {
+                throw new \RuntimeException($curlError);
+            }
+
+            $success = $statusCode === 200;
 
             $this->log(
                 $success ? 'info' : 'error',
                 $success
                     ? 'FrankenPHP Workers erfolgreich neu gestartet'
-                    : 'FrankenPHP Worker-Neustart fehlgeschlagen (HTTP ' . $response->getStatusCode() . ')',
+                    : 'FrankenPHP Worker-Neustart fehlgeschlagen (HTTP ' . $statusCode . ')',
                 ['triggered_by' => $triggeredBy, 'url' => $url]
             );
             $this->writeStatus('restart', $triggeredBy, $success, ['restart' => $success]);
