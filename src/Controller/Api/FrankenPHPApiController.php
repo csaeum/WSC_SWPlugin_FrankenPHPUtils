@@ -3,13 +3,12 @@
 namespace WSC\WSC_SWPlugin_FrankenPHPUtils\Controller\Api;
 
 use Shopware\Core\Framework\Context;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use WSC\WSC_SWPlugin_FrankenPHPUtils\Service\FrankenPHPService;
 
 #[Route(defaults: ['_routeScope' => ['api']])]
-class FrankenPHPApiController extends AbstractController
+class FrankenPHPApiController
 {
     public function __construct(
         private readonly FrankenPHPService $frankenPHPService,
