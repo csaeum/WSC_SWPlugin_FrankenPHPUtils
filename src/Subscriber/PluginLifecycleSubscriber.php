@@ -7,6 +7,7 @@ use Shopware\Core\Framework\Plugin\Event\PluginPostDeactivateEvent;
 use Shopware\Core\Framework\Plugin\Event\PluginPostInstallEvent;
 use Shopware\Core\Framework\Plugin\Event\PluginPostUninstallEvent;
 use Shopware\Core\Framework\Plugin\Event\PluginPostUpdateEvent;
+use Shopware\Storefront\Theme\Event\ThemeCopyToLiveEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use WSC\WSC_SWPlugin_FrankenPHPUtils\Service\FrankenPHPService;
 
@@ -19,13 +20,18 @@ class PluginLifecycleSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
-        return [
-            PluginPostInstallEvent::class    => 'onPluginPostInstall',
-            PluginPostActivateEvent::class   => 'onPluginPostActivate',
-            PluginPostDeactivateEvent::class => 'onPluginPostDeactivate',
-            PluginPostUninstallEvent::class  => 'onPluginPostUninstall',
-            PluginPostUpdateEvent::class     => 'onPluginPostUpdate',
-        ];
+        return array_merge(
+            [
+                PluginPostInstallEvent::class    => 'onPluginPostInstall',
+                PluginPostActivateEvent::class   => 'onPluginPostActivate',
+                PluginPostDeactivateEvent::class => 'onPluginPostDeactivate',
+                PluginPostUninstallEvent::class  => 'onPluginPostUninstall',
+                PluginPostUpdateEvent::class     => 'onPluginPostUpdate',
+            ],
+            class_exists(ThemeCopyToLiveEvent::class)
+                ? [ThemeCopyToLiveEvent::class => 'onThemeCopyToLive']
+                : []
+        );
     }
 
     public function onPluginPostInstall(PluginPostInstallEvent $event): void
@@ -56,6 +62,11 @@ class PluginLifecycleSubscriber implements EventSubscriberInterface
     {
         $pluginName = $event->getContext()->getPlugin()->getName();
         $this->handleLifecycleEvent('update:' . $pluginName);
+    }
+
+    public function onThemeCopyToLive(ThemeCopyToLiveEvent $event): void
+    {
+        $this->handleLifecycleEvent('theme_copy_to_live');
     }
 
     private function handleLifecycleEvent(string $triggeredBy): void

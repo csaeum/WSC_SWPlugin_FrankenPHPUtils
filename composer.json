@@ -3,7 +3,7 @@
     "description": "WSC FrankenPHP Utils - Automatischer Worker-Neustart bei Plugin-Lifecycle-Events",
     "version": "0.9.9",
     "type": "shopware-platform-plugin",
-    "license": "MIT",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Christian Säum",
@@ -37,6 +37,6 @@
         }
     },
     "require": {
-        "shopware/core": "~6.7.0"
+        "shopware/core": ">=6.6.0 <6.8.0"
     }
 }

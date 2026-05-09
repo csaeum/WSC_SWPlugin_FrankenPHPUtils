@@ -165,6 +165,7 @@ class FrankenPHPService
     {
         $consolePath = $this->projectDir . '/bin/console';
         $process = new Process(array_merge($this->getConsoleCommandPrefix($consolePath), $command));
+        $process->setEnv(['WSC_FRANKENPHP_INTERNAL' => '1']);
         $process->setTimeout(300);
 
         try {
@@ -215,7 +216,11 @@ class FrankenPHPService
             return;
         }
 
-        $this->logger->{$level}('[WSC_FrankenPHPUtils] ' . $message, $context);
+        match ($level) {
+            'error'   => $this->logger->error('[WSC_FrankenPHPUtils] ' . $message, $context),
+            'warning' => $this->logger->warning('[WSC_FrankenPHPUtils] ' . $message, $context),
+            default   => $this->logger->info('[WSC_FrankenPHPUtils] ' . $message, $context),
+        };
         $this->writePluginLog($level, $message, $context);
     }
 

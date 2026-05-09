@@ -109,7 +109,7 @@
                             variant="primary"
                             size="small"
                             :isLoading="isLoadingCache"
-                            :disabled="isLoadingCache || isLoadingFullDeploy || isLoadingCacheRestart"
+                            :disabled="isLoadingCache || isLoadingFullDeploy || isLoadingCacheRestart || isLoadingRestart || isLoadingTheme"
                             @click="onClearCache">
                             <sw-icon name="regular-sync" small/>
                             {{ $tc('wsc-frankenphp-utils.actions.cacheClear') }}
@@ -124,7 +124,7 @@
                             variant="primary"
                             size="small"
                             :isLoading="isLoadingTheme"
-                            :disabled="isLoadingTheme || isLoadingFullDeploy || isLoadingCacheRestart"
+                            :disabled="isLoadingTheme || isLoadingFullDeploy || isLoadingCacheRestart || isLoadingRestart || isLoadingCache"
                             @click="onCompileTheme">
                             <sw-icon name="regular-palette" small/>
                             {{ $tc('wsc-frankenphp-utils.actions.themeCompile') }}
@@ -139,7 +139,7 @@
                             variant="primary"
                             size="small"
                             :isLoading="isLoadingRestart"
-                            :disabled="isLoadingRestart || isLoadingFullDeploy || isLoadingCacheRestart"
+                            :disabled="isLoadingRestart || isLoadingFullDeploy || isLoadingCacheRestart || isLoadingCache || isLoadingTheme"
                             @click="onRestartWorkers">
                             <sw-icon name="regular-power-btn" small/>
                             {{ $tc('wsc-frankenphp-utils.actions.restart') }}

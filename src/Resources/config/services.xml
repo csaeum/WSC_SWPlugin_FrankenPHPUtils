@@ -36,9 +36,6 @@
         <!-- ============================================================ -->
         <service id="WSC\WSC_SWPlugin_FrankenPHPUtils\Controller\Api\FrankenPHPApiController" public="true">
             <argument type="service" id="WSC\WSC_SWPlugin_FrankenPHPUtils\Service\FrankenPHPService"/>
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
         </service>
 
     </services>

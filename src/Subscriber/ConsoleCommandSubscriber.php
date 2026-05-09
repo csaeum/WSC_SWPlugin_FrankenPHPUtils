@@ -28,6 +28,10 @@ class ConsoleCommandSubscriber implements EventSubscriberInterface
 
     public function onConsoleTerminate(ConsoleTerminateEvent $event): void
     {
+        if (getenv('WSC_FRANKENPHP_INTERNAL') === '1') {
+            return;
+        }
+
         if ($event->getExitCode() !== 0) {
             return;
         }
