@@ -130,21 +130,6 @@ cp -r public/bundles/wscswpluginfrankenphputils/administration/.vite \
 
 ---
 
-## Bekannte Probleme / TODO
-
-### `bin/console cache:clear` löst keinen Worker-Neustart aus
-
-**Status:** Offen — muss noch untersucht werden.
-
-`bin/console cache:clear` feuert unter bestimmten Bedingungen kein `ConsoleTerminateEvent` mit dem richtigen Befehlsnamen. Als Workaround greift der Subscriber bereits auf `cache:warmup` zurück (das Shopware intern nach `cache:clear` ausführt), aber das Verhalten ist nicht in allen Setups konsistent.
-
-**Workaround:** Nach einem manuellen `cache:clear` den Worker-Neustart über den Admin-Button oder direkt über die Caddy Admin API auslösen:
-```bash
-curl -X POST http://localhost:2019/frankenphp/workers/restart
-```
-
----
-
 ## Lizenz
 
 MIT — © Christian Säum, [Web-SEO-Consulting.eu](https://www.Web-SEO-Consulting.eu)
