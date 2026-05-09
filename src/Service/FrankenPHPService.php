@@ -92,6 +92,26 @@ class FrankenPHPService
         return $results;
     }
 
+    /**
+     * Cache leeren und anschliessend Worker neu starten.
+     *
+     * @return array{cacheClear: bool, restart: bool}
+     */
+    public function runCacheClearAndRestart(string $triggeredBy = 'manual'): array
+    {
+        $results = [
+            'cacheClear' => false,
+            'restart'    => false,
+        ];
+
+        $results['cacheClear'] = $this->clearCache($triggeredBy);
+        $results['restart'] = $this->restartWorkers($triggeredBy);
+
+        $this->log('info', 'Cache-Clear und Worker-Restart abgeschlossen', array_merge($results, ['triggered_by' => $triggeredBy]));
+
+        return $results;
+    }
+
     // -------------------------------------------------------------------------
     // Konfigurations-Getter für den Subscriber
     // -------------------------------------------------------------------------

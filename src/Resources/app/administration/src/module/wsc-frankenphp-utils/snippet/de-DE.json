@@ -10,7 +10,10 @@
             }
         },
         "actions": {
+            "signal": "FrankenPHP Signal senden",
             "fullDeploy": "Full-Deploy ausführen",
+            "cacheRestart": "Cache leeren + Workers neu starten",
+            "cacheRestartHint": "Leert den Shopware-Cache und startet danach die FrankenPHP Workers neu",
             "cacheClear": "Cache leeren",
             "cacheClearHint": "Leert den Shopware-Cache (bin/console cache:clear)",
             "themeCompile": "Theme kompilieren",
@@ -18,11 +21,18 @@
             "restart": "Workers neu starten",
             "restartHint": "Startet FrankenPHP Worker graceful neu über die Caddy Admin API"
         },
+        "results": {
+            "cache": "Cache",
+            "theme": "Theme",
+            "restart": "Restart"
+        },
         "notifications": {
             "restartSuccess": "FrankenPHP Workers erfolgreich neu gestartet",
             "restartError": "Fehler beim Neustart der FrankenPHP Workers – Details im Log",
             "cacheSuccess": "Cache erfolgreich geleert",
             "cacheError": "Fehler beim Leeren des Caches – Details im Log",
+            "cacheRestartSuccess": "Cache geleert und FrankenPHP Workers neu gestartet",
+            "cacheRestartError": "Fehler beim Leeren des Caches oder Neustart der Workers – Details im Log",
             "themeSuccess": "Theme erfolgreich kompiliert",
             "themeError": "Fehler bei der Theme-Kompilierung – Details im Log",
             "fullDeploySuccess": "Full-Deploy erfolgreich abgeschlossen",

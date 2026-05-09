@@ -13,6 +13,7 @@ Component.register('wsc-frankenphp-utils-index', {
         return {
             isLoadingRestart: false,
             isLoadingCache: false,
+            isLoadingCacheRestart: false,
             isLoadingTheme: false,
             isLoadingFullDeploy: false,
             lastResult: null,
@@ -43,6 +44,19 @@ Component.register('wsc-frankenphp-utils-index', {
                 this.showError(this.$tc('wsc-frankenphp-utils.notifications.cacheError'));
             } finally {
                 this.isLoadingCache = false;
+            }
+        },
+
+        async onClearCacheAndRestart() {
+            this.isLoadingCacheRestart = true;
+            this.lastResult = null;
+            try {
+                const data = await this.callApi('/api/wsc-frankenphp/cache-clear-restart');
+                this.handleResult(data);
+            } catch (e) {
+                this.showError(this.$tc('wsc-frankenphp-utils.notifications.cacheRestartError'));
+            } finally {
+                this.isLoadingCacheRestart = false;
             }
         },
 
@@ -83,12 +97,14 @@ Component.register('wsc-frankenphp-utils-index', {
         },
 
         handleResult(data) {
+            const message = data.messageKey ? this.$tc(data.messageKey) : data.message;
+
             if (data.success) {
-                this.createNotificationSuccess({ message: data.message });
-                this.lastResult = { success: true, message: data.message, results: data.results ?? null };
+                this.createNotificationSuccess({ message });
+                this.lastResult = { success: true, message, results: data.results ?? null };
             } else {
-                this.createNotificationError({ message: data.message });
-                this.lastResult = { success: false, message: data.message, results: data.results ?? null };
+                this.createNotificationError({ message });
+                this.lastResult = { success: false, message, results: data.results ?? null };
             }
         },
 

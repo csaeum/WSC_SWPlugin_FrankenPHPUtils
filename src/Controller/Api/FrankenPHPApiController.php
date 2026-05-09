@@ -30,9 +30,9 @@ class FrankenPHPApiController extends AbstractController
 
         return new JsonResponse([
             'success' => $success,
-            'message' => $success
-                ? 'FrankenPHP Workers erfolgreich neu gestartet'
-                : 'Fehler beim Neustart der FrankenPHP Workers',
+            'messageKey' => $success
+                ? 'wsc-frankenphp-utils.notifications.restartSuccess'
+                : 'wsc-frankenphp-utils.notifications.restartError',
         ]);
     }
 
@@ -50,9 +50,31 @@ class FrankenPHPApiController extends AbstractController
 
         return new JsonResponse([
             'success' => $success,
-            'message' => $success
-                ? 'Cache erfolgreich geleert'
-                : 'Fehler beim Leeren des Caches',
+            'messageKey' => $success
+                ? 'wsc-frankenphp-utils.notifications.cacheSuccess'
+                : 'wsc-frankenphp-utils.notifications.cacheError',
+        ]);
+    }
+
+    /**
+     * Leert den Shopware Cache und startet FrankenPHP Worker neu.
+     */
+    #[Route(
+        path: '/api/wsc-frankenphp/cache-clear-restart',
+        name: 'api.wsc_frankenphp.cache_clear_restart',
+        methods: ['POST']
+    )]
+    public function cacheClearRestart(Context $context): JsonResponse
+    {
+        $results = $this->frankenPHPService->runCacheClearAndRestart('admin_manual');
+        $allSuccess = !in_array(false, $results, true);
+
+        return new JsonResponse([
+            'success' => $allSuccess,
+            'results' => $results,
+            'messageKey' => $allSuccess
+                ? 'wsc-frankenphp-utils.notifications.cacheRestartSuccess'
+                : 'wsc-frankenphp-utils.notifications.cacheRestartError',
         ]);
     }
 
@@ -70,9 +92,9 @@ class FrankenPHPApiController extends AbstractController
 
         return new JsonResponse([
             'success' => $success,
-            'message' => $success
-                ? 'Theme erfolgreich kompiliert'
-                : 'Fehler bei der Theme-Kompilierung',
+            'messageKey' => $success
+                ? 'wsc-frankenphp-utils.notifications.themeSuccess'
+                : 'wsc-frankenphp-utils.notifications.themeError',
         ]);
     }
 
@@ -92,9 +114,9 @@ class FrankenPHPApiController extends AbstractController
         return new JsonResponse([
             'success' => $allSuccess,
             'results' => $results,
-            'message' => $allSuccess
-                ? 'Full-Deploy erfolgreich abgeschlossen'
-                : 'Full-Deploy mit Fehlern abgeschlossen – Details im Log',
+            'messageKey' => $allSuccess
+                ? 'wsc-frankenphp-utils.notifications.fullDeploySuccess'
+                : 'wsc-frankenphp-utils.notifications.fullDeployError',
         ]);
     }
 }

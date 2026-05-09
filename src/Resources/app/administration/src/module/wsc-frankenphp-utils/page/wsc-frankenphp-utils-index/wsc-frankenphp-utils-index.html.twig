@@ -8,8 +8,15 @@
     <template #smart-bar-actions>
         <sw-button
             variant="primary"
+            :isLoading="isLoadingRestart"
+            :disabled="isLoadingFullDeploy || isLoadingCacheRestart || isLoadingRestart || isLoadingCache || isLoadingTheme"
+            @click="onRestartWorkers">
+            {{ $tc('wsc-frankenphp-utils.actions.signal') }}
+        </sw-button>
+        <sw-button
+            variant="ghost"
             :isLoading="isLoadingFullDeploy"
-            :disabled="isLoadingFullDeploy || isLoadingRestart || isLoadingCache || isLoadingTheme"
+            :disabled="isLoadingFullDeploy || isLoadingCacheRestart || isLoadingRestart || isLoadingCache || isLoadingTheme"
             @click="onFullDeploy">
             {{ $tc('wsc-frankenphp-utils.actions.fullDeploy') }}
         </sw-button>
@@ -36,9 +43,11 @@
                 <template v-if="lastResult.results">
                     <br>
                     <small>
-                        Cache: {{ lastResult.results.cacheClear ? '✓' : '✗' }} &nbsp;|&nbsp;
-                        Theme: {{ lastResult.results.themeCompile ? '✓' : '✗' }} &nbsp;|&nbsp;
-                        Restart: {{ lastResult.results.restart ? '✓' : '✗' }}
+                        {{ $tc('wsc-frankenphp-utils.results.cache') }}: {{ lastResult.results.cacheClear ? '✓' : '✗' }} &nbsp;|&nbsp;
+                        <template v-if="lastResult.results.themeCompile !== undefined">
+                            {{ $tc('wsc-frankenphp-utils.results.theme') }}: {{ lastResult.results.themeCompile ? '✓' : '✗' }} &nbsp;|&nbsp;
+                        </template>
+                        {{ $tc('wsc-frankenphp-utils.results.restart') }}: {{ lastResult.results.restart ? '✓' : '✗' }}
                     </small>
                 </template>
             </sw-alert>
@@ -53,10 +62,25 @@
 
                     <div class="wsc-frankenphp-utils__action-item">
                         <sw-button
+                            variant="primary"
+                            size="small"
+                            :isLoading="isLoadingCacheRestart"
+                            :disabled="isLoadingCacheRestart || isLoadingFullDeploy || isLoadingCache || isLoadingRestart || isLoadingTheme"
+                            @click="onClearCacheAndRestart">
+                            <sw-icon name="regular-sync" small/>
+                            {{ $tc('wsc-frankenphp-utils.actions.cacheRestart') }}
+                        </sw-button>
+                        <p class="wsc-frankenphp-utils__action-hint">
+                            {{ $tc('wsc-frankenphp-utils.actions.cacheRestartHint') }}
+                        </p>
+                    </div>
+
+                    <div class="wsc-frankenphp-utils__action-item">
+                        <sw-button
                             variant="ghost"
                             size="small"
                             :isLoading="isLoadingCache"
-                            :disabled="isLoadingCache || isLoadingFullDeploy"
+                            :disabled="isLoadingCache || isLoadingFullDeploy || isLoadingCacheRestart"
                             @click="onClearCache">
                             <sw-icon name="regular-sync" small/>
                             {{ $tc('wsc-frankenphp-utils.actions.cacheClear') }}
@@ -71,7 +95,7 @@
                             variant="ghost"
                             size="small"
                             :isLoading="isLoadingTheme"
-                            :disabled="isLoadingTheme || isLoadingFullDeploy"
+                            :disabled="isLoadingTheme || isLoadingFullDeploy || isLoadingCacheRestart"
                             @click="onCompileTheme">
                             <sw-icon name="regular-palette" small/>
                             {{ $tc('wsc-frankenphp-utils.actions.themeCompile') }}
@@ -86,7 +110,7 @@
                             variant="ghost"
                             size="small"
                             :isLoading="isLoadingRestart"
-                            :disabled="isLoadingRestart || isLoadingFullDeploy"
+                            :disabled="isLoadingRestart || isLoadingFullDeploy || isLoadingCacheRestart"
                             @click="onRestartWorkers">
                             <sw-icon name="regular-power-btn" small/>
                             {{ $tc('wsc-frankenphp-utils.actions.restart') }}

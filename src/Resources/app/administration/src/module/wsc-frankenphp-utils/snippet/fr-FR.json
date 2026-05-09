@@ -10,7 +10,10 @@
             }
         },
         "actions": {
+            "signal": "Envoyer le signal FrankenPHP",
             "fullDeploy": "Executer le deploiement complet",
+            "cacheRestart": "Vider le cache + redemarrer les workers",
+            "cacheRestartHint": "Vide le cache Shopware puis redemarre les workers FrankenPHP",
             "cacheClear": "Vider le cache",
             "cacheClearHint": "Vide le cache Shopware (bin/console cache:clear)",
             "themeCompile": "Compiler le theme",
@@ -18,11 +21,18 @@
             "restart": "Redemarrer les workers",
             "restartHint": "Redemarre proprement les workers FrankenPHP via l'API d'administration Caddy"
         },
+        "results": {
+            "cache": "Cache",
+            "theme": "Theme",
+            "restart": "Redemarrage"
+        },
         "notifications": {
             "restartSuccess": "Workers FrankenPHP redemarres avec succes",
             "restartError": "Erreur lors du redemarrage des workers FrankenPHP - consultez le journal pour plus de details",
             "cacheSuccess": "Cache vide avec succes",
             "cacheError": "Erreur lors du vidage du cache - consultez le journal pour plus de details",
+            "cacheRestartSuccess": "Cache vide et workers FrankenPHP redemarres",
+            "cacheRestartError": "Erreur lors du vidage du cache ou du redemarrage des workers - consultez le journal pour plus de details",
             "themeSuccess": "Theme compile avec succes",
             "themeError": "Erreur lors de la compilation du theme - consultez le journal pour plus de details",
             "fullDeploySuccess": "Deploiement complet termine avec succes",

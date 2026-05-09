@@ -7,24 +7,34 @@
     <!-- ============================================================ -->
     <card>
         <title>FrankenPHP Verbindung</title>
+        <title lang="de-DE">FrankenPHP Verbindung</title>
         <title lang="en-GB">FrankenPHP Connection</title>
+        <title lang="fr-FR">Connexion FrankenPHP</title>
 
         <input-field type="text">
             <name>adminApiUrl</name>
             <label>Admin API URL</label>
+            <label lang="de-DE">Admin API URL</label>
             <label lang="en-GB">Admin API URL</label>
+            <label lang="fr-FR">URL de l'API d'administration</label>
             <defaultValue>http://localhost:2019</defaultValue>
             <helpText>URL zur FrankenPHP Caddy Admin API aus Sicht des Shopware/PHP-Prozesses. Gleicher Container: http://localhost:2019. Getrennte Docker-Container: http://&lt;service-name&gt;:2019, z. B. http://craftingbay-sw6-frankenphp-app:2019.</helpText>
+            <helpText lang="de-DE">URL zur FrankenPHP Caddy Admin API aus Sicht des Shopware/PHP-Prozesses. Gleicher Container: http://localhost:2019. Getrennte Docker-Container: http://&lt;service-name&gt;:2019, z. B. http://craftingbay-sw6-frankenphp-app:2019.</helpText>
             <helpText lang="en-GB">URL to the FrankenPHP Caddy Admin API from the Shopware/PHP process. Same container: http://localhost:2019. Separate Docker containers: http://&lt;service-name&gt;:2019, e.g. http://craftingbay-sw6-frankenphp-app:2019.</helpText>
+            <helpText lang="fr-FR">URL de l'API d'administration Caddy de FrankenPHP vue depuis le processus Shopware/PHP. Meme conteneur : http://localhost:2019. Conteneurs Docker separes : http://&lt;service-name&gt;:2019, par exemple http://craftingbay-sw6-frankenphp-app:2019.</helpText>
         </input-field>
 
         <input-field type="int">
             <name>timeout</name>
             <label>Timeout (Sekunden)</label>
+            <label lang="de-DE">Timeout (Sekunden)</label>
             <label lang="en-GB">Timeout (seconds)</label>
+            <label lang="fr-FR">Delai d'attente (secondes)</label>
             <defaultValue>5</defaultValue>
             <helpText>Maximale Wartezeit für den HTTP-Call zur Admin API</helpText>
+            <helpText lang="de-DE">Maximale Wartezeit für den HTTP-Call zur Admin API</helpText>
             <helpText lang="en-GB">Maximum wait time for the HTTP call to the Admin API</helpText>
+            <helpText lang="fr-FR">Temps d'attente maximal pour l'appel HTTP vers l'API d'administration</helpText>
         </input-field>
     </card>
 
@@ -33,33 +43,47 @@
     <!-- ============================================================ -->
     <card>
         <title>Automatische Aktionen bei Plugin-Events</title>
+        <title lang="de-DE">Automatische Aktionen bei Plugin-Events</title>
         <title lang="en-GB">Automatic Actions on Plugin Events</title>
+        <title lang="fr-FR">Actions automatiques lors des evenements de plugins</title>
 
         <input-field type="bool">
             <name>autoRestartOnPluginEvent</name>
             <label>Auto-Restart bei Plugin-Events</label>
+            <label lang="de-DE">Auto-Restart bei Plugin-Events</label>
             <label lang="en-GB">Auto-restart on plugin events</label>
+            <label lang="fr-FR">Redemarrage automatique lors des evenements de plugins</label>
             <defaultValue>true</defaultValue>
             <helpText>FrankenPHP Workers automatisch neu starten nach Install, Update, Activate, Deactivate, Uninstall</helpText>
+            <helpText lang="de-DE">FrankenPHP Workers automatisch neu starten nach Install, Update, Activate, Deactivate, Uninstall</helpText>
             <helpText lang="en-GB">Automatically restart FrankenPHP workers after install, update, activate, deactivate, uninstall</helpText>
+            <helpText lang="fr-FR">Redemarre automatiquement les workers FrankenPHP apres installation, mise a jour, activation, desactivation et desinstallation</helpText>
         </input-field>
 
         <input-field type="bool">
             <name>autoCacheClearOnPluginEvent</name>
             <label>Cache automatisch leeren bei Plugin-Events</label>
+            <label lang="de-DE">Cache automatisch leeren bei Plugin-Events</label>
             <label lang="en-GB">Auto clear cache on plugin events</label>
+            <label lang="fr-FR">Vider automatiquement le cache lors des evenements de plugins</label>
             <defaultValue>true</defaultValue>
             <helpText>Shopware Cache automatisch leeren nach Plugin-Lifecycle-Events</helpText>
+            <helpText lang="de-DE">Shopware Cache automatisch leeren nach Plugin-Lifecycle-Events</helpText>
             <helpText lang="en-GB">Automatically clear Shopware cache after plugin lifecycle events</helpText>
+            <helpText lang="fr-FR">Vide automatiquement le cache Shopware apres les evenements du cycle de vie des plugins</helpText>
         </input-field>
 
         <input-field type="bool">
             <name>autoThemeCompileOnPluginEvent</name>
             <label>Theme automatisch kompilieren bei Plugin-Events</label>
+            <label lang="de-DE">Theme automatisch kompilieren bei Plugin-Events</label>
             <label lang="en-GB">Auto compile theme on plugin events</label>
+            <label lang="fr-FR">Compiler automatiquement le theme lors des evenements de plugins</label>
             <defaultValue>false</defaultValue>
             <helpText>Achtung: Theme-Kompilierung kann mehrere Minuten dauern und den Request blockieren!</helpText>
+            <helpText lang="de-DE">Achtung: Theme-Kompilierung kann mehrere Minuten dauern und den Request blockieren!</helpText>
             <helpText lang="en-GB">Warning: Theme compilation can take several minutes and will block the request!</helpText>
+            <helpText lang="fr-FR">Attention : la compilation du theme peut prendre plusieurs minutes et bloquer la requete !</helpText>
         </input-field>
     </card>
 
@@ -68,15 +92,21 @@
     <!-- ============================================================ -->
     <card>
         <title>Logging</title>
+        <title lang="de-DE">Logging</title>
         <title lang="en-GB">Logging</title>
+        <title lang="fr-FR">Journalisation</title>
 
         <input-field type="bool">
             <name>enableLogging</name>
             <label>Logging aktivieren</label>
+            <label lang="de-DE">Logging aktivieren</label>
             <label lang="en-GB">Enable logging</label>
+            <label lang="fr-FR">Activer la journalisation</label>
             <defaultValue>true</defaultValue>
             <helpText>Alle Aktionen in das Shopware-Log schreiben (var/log/prod.log)</helpText>
+            <helpText lang="de-DE">Alle Aktionen in das Shopware-Log schreiben (var/log/prod.log)</helpText>
             <helpText lang="en-GB">Write all actions to the Shopware log (var/log/prod.log)</helpText>
+            <helpText lang="fr-FR">Ecrit toutes les actions dans le journal Shopware (var/log/prod.log)</helpText>
         </input-field>
     </card>
 
