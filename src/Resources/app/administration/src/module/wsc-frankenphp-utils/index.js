@@ -31,7 +31,7 @@ Module.register('wsc-frankenphp-utils', {
         color: '#F19D35',
         path: 'wsc.frankenphp.utils.index',
         icon: 'regular-tools',
-        parent: 'sw-settings',
+        parent: 'sw-extension',
         position: 100,
     }],
 });
