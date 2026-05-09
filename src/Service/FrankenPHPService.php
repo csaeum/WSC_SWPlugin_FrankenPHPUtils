@@ -10,6 +10,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class FrankenPHPService
 {
     private const CONFIG_PREFIX = 'WSC_SWPlugin_FrankenPHPUtils.config.';
+    private const LOG_FILE = 'wsc_swplugin_frankenphputils.log';
 
     public function __construct(
         private readonly SystemConfigService $systemConfig,
@@ -173,6 +174,27 @@ class FrankenPHPService
         }
 
         $this->logger->{$level}('[WSC_FrankenPHPUtils] ' . $message, $context);
+        $this->writePluginLog($level, $message, $context);
+    }
+
+    private function writePluginLog(string $level, string $message, array $context = []): void
+    {
+        $logDir = $this->projectDir . '/var/log';
+        if (!is_dir($logDir) && !@mkdir($logDir, 0775, true) && !is_dir($logDir)) {
+            return;
+        }
+
+        $contextJson = $context !== [] ? ' ' . json_encode($context, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : '';
+        $line = sprintf(
+            "[%s] %s: %s%s%s",
+            (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+            strtoupper($level),
+            $message,
+            $contextJson,
+            PHP_EOL
+        );
+
+        @file_put_contents($logDir . '/' . self::LOG_FILE, $line, FILE_APPEND | LOCK_EX);
     }
 
     private function getConfig(string $key, mixed $default = null): mixed
