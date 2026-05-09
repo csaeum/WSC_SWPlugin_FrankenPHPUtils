@@ -5,7 +5,6 @@ namespace WSC\WSC_SWPlugin_FrankenPHPUtils\Service;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Process\Process;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class FrankenPHPService
 {
@@ -15,14 +14,13 @@ class FrankenPHPService
 
     public function __construct(
         private readonly SystemConfigService $systemConfig,
-        private readonly HttpClientInterface $httpClient,
         private readonly LoggerInterface $logger,
         private readonly string $projectDir,
     ) {
     }
 
     /**
-     * Startet alle FrankenPHP Worker graceful neu über die Caddy Admin API.
+     * Startet alle FrankenPHP Worker graceful neu über die Caddy Admin API (natives curl).
      */
     public function restartWorkers(string $triggeredBy = 'manual'): bool
     {
@@ -30,18 +28,27 @@ class FrankenPHPService
         $timeout = (int) $this->getConfig('timeout', 5);
 
         try {
-            $response = $this->httpClient->request('POST', $url . '/frankenphp/workers/restart', [
-                'timeout' => $timeout,
-            ]);
+            $ch = curl_init($url . '/frankenphp/workers/restart');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+            $responseBody = (string) curl_exec($ch);
+            $statusCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $curlError = curl_error($ch);
+            curl_close($ch);
 
-            $success = $response->getStatusCode() === 200;
+            if ($curlError !== '') {
+                throw new \RuntimeException($curlError);
+            }
+
+            $success = $statusCode === 200;
 
             $this->log(
                 $success ? 'info' : 'error',
                 $success
                     ? 'FrankenPHP Workers erfolgreich neu gestartet'
-                    : 'FrankenPHP Worker-Neustart fehlgeschlagen (HTTP ' . $response->getStatusCode() . ')',
-                ['triggered_by' => $triggeredBy, 'url' => $url]
+                    : 'FrankenPHP Worker-Neustart fehlgeschlagen (HTTP ' . $statusCode . ')',
+                ['triggered_by' => $triggeredBy, 'url' => $url, 'http_status' => $statusCode, 'response' => $responseBody]
             );
             $this->writeStatus('restart', $triggeredBy, $success, ['restart' => $success]);
 
@@ -165,6 +172,7 @@ class FrankenPHPService
     {
         $consolePath = $this->projectDir . '/bin/console';
         $process = new Process(array_merge($this->getConsoleCommandPrefix($consolePath), $command));
+        $process->setEnv(['WSC_FRANKENPHP_INTERNAL' => '1']);
         $process->setTimeout(300);
 
         try {
@@ -196,14 +204,17 @@ class FrankenPHPService
 
     /**
      * FrankenPHP exposes console execution through "frankenphp php-cli" instead of a plain php binary.
+     * In worker mode PHP_BINARY is empty — detect FrankenPHP by checking the empty binary constant
+     * and fall back to calling "frankenphp" directly (resolved from PATH by Symfony Process).
      *
      * @return list<string>
      */
     private function getConsoleCommandPrefix(string $consolePath): array
     {
         $phpBinary = PHP_BINARY;
-        if (str_contains(basename($phpBinary), 'frankenphp')) {
-            return [$phpBinary, 'php-cli', $consolePath];
+
+        if ($phpBinary === '' || str_contains(basename($phpBinary), 'frankenphp')) {
+            return ['frankenphp', 'php-cli', $consolePath];
         }
 
         return [$phpBinary, $consolePath];
@@ -215,7 +226,11 @@ class FrankenPHPService
             return;
         }
 
-        $this->logger->{$level}('[WSC_FrankenPHPUtils] ' . $message, $context);
+        match ($level) {
+            'error'   => $this->logger->error('[WSC_FrankenPHPUtils] ' . $message, $context),
+            'warning' => $this->logger->warning('[WSC_FrankenPHPUtils] ' . $message, $context),
+            default   => $this->logger->info('[WSC_FrankenPHPUtils] ' . $message, $context),
+        };
         $this->writePluginLog($level, $message, $context);
     }
 

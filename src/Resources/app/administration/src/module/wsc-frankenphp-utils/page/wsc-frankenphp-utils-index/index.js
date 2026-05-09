@@ -38,7 +38,7 @@ Component.register('wsc-frankenphp-utils-index', {
             this.isLoadingRestart = true;
             this.lastResult = null;
             try {
-                const data = await this.callApi('/api/wsc-frankenphp/restart');
+                const data = await this.callApi('/wsc-frankenphp/restart');
                 this.handleResult(data);
             } catch (e) {
                 this.showError(this.$tc('wsc-frankenphp-utils.notifications.restartError'));
@@ -52,7 +52,7 @@ Component.register('wsc-frankenphp-utils-index', {
             this.isLoadingCache = true;
             this.lastResult = null;
             try {
-                const data = await this.callApi('/api/wsc-frankenphp/cache-clear');
+                const data = await this.callApi('/wsc-frankenphp/cache-clear');
                 this.handleResult(data);
             } catch (e) {
                 this.showError(this.$tc('wsc-frankenphp-utils.notifications.cacheError'));
@@ -66,7 +66,7 @@ Component.register('wsc-frankenphp-utils-index', {
             this.isLoadingCacheRestart = true;
             this.lastResult = null;
             try {
-                const data = await this.callApi('/api/wsc-frankenphp/cache-clear-restart');
+                const data = await this.callApi('/wsc-frankenphp/cache-clear-restart');
                 this.handleResult(data);
             } catch (e) {
                 this.showError(this.$tc('wsc-frankenphp-utils.notifications.cacheRestartError'));
@@ -80,7 +80,7 @@ Component.register('wsc-frankenphp-utils-index', {
             this.isLoadingTheme = true;
             this.lastResult = null;
             try {
-                const data = await this.callApi('/api/wsc-frankenphp/theme-compile');
+                const data = await this.callApi('/wsc-frankenphp/theme-compile');
                 this.handleResult(data);
             } catch (e) {
                 this.showError(this.$tc('wsc-frankenphp-utils.notifications.themeError'));
@@ -94,7 +94,7 @@ Component.register('wsc-frankenphp-utils-index', {
             this.isLoadingFullDeploy = true;
             this.lastResult = null;
             try {
-                const data = await this.callApi('/api/wsc-frankenphp/full-deploy');
+                const data = await this.callApi('/wsc-frankenphp/full-deploy');
                 this.handleResult(data);
             } catch (e) {
                 this.showError(this.$tc('wsc-frankenphp-utils.notifications.fullDeployError'));
@@ -108,7 +108,7 @@ Component.register('wsc-frankenphp-utils-index', {
             try {
                 const token = Shopware.Service('loginService').getToken();
                 const response = await Shopware.Application.getContainer('init').httpClient.get(
-                    '/api/wsc-frankenphp/status',
+                    '/wsc-frankenphp/status',
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 this.lastStatus = response.data.status;

@@ -10,7 +10,6 @@
         <!-- ============================================================ -->
         <service id="WSC\WSC_SWPlugin_FrankenPHPUtils\Service\FrankenPHPService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
-            <argument type="service" id="Symfony\Contracts\HttpClient\HttpClientInterface"/>
             <argument type="service" id="logger"/>
             <argument>%kernel.project_dir%</argument>
         </service>
@@ -36,9 +35,7 @@
         <!-- ============================================================ -->
         <service id="WSC\WSC_SWPlugin_FrankenPHPUtils\Controller\Api\FrankenPHPApiController" public="true">
             <argument type="service" id="WSC\WSC_SWPlugin_FrankenPHPUtils\Service\FrankenPHPService"/>
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
+            <tag name="controller.service_arguments"/>
         </service>
 
     </services>
