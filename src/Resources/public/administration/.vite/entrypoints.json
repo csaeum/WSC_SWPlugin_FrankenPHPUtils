@@ -1,0 +1,23 @@
+{
+  "base": "/bundles/wsc_swplugin_frankenphputils/administration/",
+  "entryPoints": {
+    "w-s-c--s-w-plugin--franken-p-h-p-utils": {
+      "css": [],
+      "dynamic": [],
+      "js": [
+        "/bundles/wsc_swplugin_frankenphputils/administration/assets/w-s-c--s-w-plugin--franken-p-h-p-utils-CM-K-c6x.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.1.0",
+    7,
+    1,
+    0
+  ],
+  "viteServer": null
+}
