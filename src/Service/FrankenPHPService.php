@@ -139,7 +139,7 @@ class FrankenPHPService
     private function runConsoleCommand(array $command, string $triggeredBy): bool
     {
         $consolePath = $this->projectDir . '/bin/console';
-        $process = new Process(array_merge(['php', $consolePath], $command));
+        $process = new Process(array_merge($this->getConsoleCommandPrefix($consolePath), $command));
         $process->setTimeout(300);
 
         try {
@@ -165,6 +165,21 @@ class FrankenPHPService
 
             return false;
         }
+    }
+
+    /**
+     * FrankenPHP exposes console execution through "frankenphp php-cli" instead of a plain php binary.
+     *
+     * @return list<string>
+     */
+    private function getConsoleCommandPrefix(string $consolePath): array
+    {
+        $phpBinary = PHP_BINARY;
+        if (str_contains(basename($phpBinary), 'frankenphp')) {
+            return [$phpBinary, 'php-cli', $consolePath];
+        }
+
+        return [$phpBinary, $consolePath];
     }
 
     private function log(string $level, string $message, array $context = []): void

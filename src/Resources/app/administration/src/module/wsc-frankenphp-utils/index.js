@@ -26,12 +26,11 @@ Module.register('wsc-frankenphp-utils', {
         },
     },
 
-    navigation: [{
+    settingsItem: [{
+        group: 'plugins',
         label: 'wsc-frankenphp-utils.title',
-        color: '#F19D35',
-        path: 'wsc.frankenphp.utils.index',
+        to: 'wsc.frankenphp.utils.index',
         icon: 'regular-tools',
-        parent: 'sw-extension',
         position: 100,
     }],
 });

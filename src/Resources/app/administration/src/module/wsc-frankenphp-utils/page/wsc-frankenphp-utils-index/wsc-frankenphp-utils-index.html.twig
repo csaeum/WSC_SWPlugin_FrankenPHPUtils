@@ -11,13 +11,15 @@
             :isLoading="isLoadingRestart"
             :disabled="isLoadingFullDeploy || isLoadingCacheRestart || isLoadingRestart || isLoadingCache || isLoadingTheme"
             @click="onRestartWorkers">
+            <sw-icon name="regular-power-btn" small/>
             {{ $tc('wsc-frankenphp-utils.actions.signal') }}
         </sw-button>
         <sw-button
-            variant="ghost"
+            variant="primary"
             :isLoading="isLoadingFullDeploy"
             :disabled="isLoadingFullDeploy || isLoadingCacheRestart || isLoadingRestart || isLoadingCache || isLoadingTheme"
             @click="onFullDeploy">
+            <sw-icon name="regular-sync" small/>
             {{ $tc('wsc-frankenphp-utils.actions.fullDeploy') }}
         </sw-button>
     </template>
@@ -77,7 +79,7 @@
 
                     <div class="wsc-frankenphp-utils__action-item">
                         <sw-button
-                            variant="ghost"
+                            variant="primary"
                             size="small"
                             :isLoading="isLoadingCache"
                             :disabled="isLoadingCache || isLoadingFullDeploy || isLoadingCacheRestart"
@@ -92,7 +94,7 @@
 
                     <div class="wsc-frankenphp-utils__action-item">
                         <sw-button
-                            variant="ghost"
+                            variant="primary"
                             size="small"
                             :isLoading="isLoadingTheme"
                             :disabled="isLoadingTheme || isLoadingFullDeploy || isLoadingCacheRestart"
@@ -107,7 +109,7 @@
 
                     <div class="wsc-frankenphp-utils__action-item">
                         <sw-button
-                            variant="ghost"
+                            variant="primary"
                             size="small"
                             :isLoading="isLoadingRestart"
                             :disabled="isLoadingRestart || isLoadingFullDeploy || isLoadingCacheRestart"
