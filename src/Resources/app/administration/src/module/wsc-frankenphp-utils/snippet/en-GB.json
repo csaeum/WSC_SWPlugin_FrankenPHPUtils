@@ -2,7 +2,7 @@
     "wsc-frankenphp-utils": {
         "title": "WSC FrankenPHP Utils",
         "description": "FrankenPHP worker management and cache control",
-        "info": "Here you can manually restart FrankenPHP workers, clear the cache or compile themes. These actions are also executed automatically on plugin events (install, update, activate, deactivate, uninstall) depending on your configuration.",
+        "info": "Here you can manually restart FrankenPHP workers, clear the cache or compile themes. All actions clear not only the Shopware file cache but also OPcache and APCu – making them equivalent to a full container restart. These actions are also executed automatically on plugin events (install, update, activate, deactivate, uninstall) depending on your configuration.",
         "card": {
             "actions": {
                 "title": "Manual Actions",
@@ -13,16 +13,16 @@
             }
         },
         "actions": {
-            "signal": "Send FrankenPHP signal",
+            "signal": "Restart Workers",
             "fullDeploy": "Run Full Deploy",
             "cacheRestart": "Clear cache + restart workers",
-            "cacheRestartHint": "Clears the Shopware cache and then restarts the FrankenPHP workers",
+            "cacheRestartHint": "Clears Shopware file cache, OPcache and APCu – then restarts all FrankenPHP workers. Equivalent to a container restart.",
             "cacheClear": "Clear Cache",
-            "cacheClearHint": "Clears the Shopware cache (bin/console cache:clear)",
+            "cacheClearHint": "Clears the Shopware file cache (cache:clear), OPcache and APCu. PHP recompiles all classes on next request.",
             "themeCompile": "Compile Theme",
-            "themeCompileHint": "Compiles all themes (bin/console theme:compile) – may take a few minutes",
+            "themeCompileHint": "Recompiles all themes (theme:compile) – may take a few minutes. Follow up with \"Clear cache + restart workers\" afterwards.",
             "restart": "Restart Workers",
-            "restartHint": "Gracefully restarts FrankenPHP workers via the Caddy Admin API"
+            "restartHint": "Clears OPcache and APCu, then gracefully restarts FrankenPHP workers (Caddy Admin API). Equivalent to a container restart."
         },
         "results": {
             "cache": "Cache",
@@ -48,11 +48,11 @@
             }
         },
         "notifications": {
-            "restartSuccess": "FrankenPHP workers restarted successfully",
+            "restartSuccess": "OPcache cleared and FrankenPHP workers restarted successfully",
             "restartError": "Error restarting FrankenPHP workers – check log for details",
-            "cacheSuccess": "Cache cleared successfully",
+            "cacheSuccess": "Shopware cache, OPcache and APCu cleared successfully",
             "cacheError": "Error clearing cache – check log for details",
-            "cacheRestartSuccess": "Cache cleared and FrankenPHP workers restarted",
+            "cacheRestartSuccess": "Cache cleared, OPcache + APCu reset and FrankenPHP workers restarted",
             "cacheRestartError": "Error clearing cache or restarting workers – check log for details",
             "themeSuccess": "Theme compiled successfully",
             "themeError": "Error compiling theme – check log for details",

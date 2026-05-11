@@ -2,7 +2,7 @@
     "wsc-frankenphp-utils": {
         "title": "WSC FrankenPHP Utils",
         "description": "FrankenPHP Worker-Management und Cache-Steuerung",
-        "info": "Hier kannst du FrankenPHP Worker manuell neu starten, den Cache leeren oder das Theme kompilieren. Diese Aktionen werden bei Plugin-Events (Install, Update, Activate, Deactivate, Uninstall) je nach Konfiguration automatisch ausgeführt.",
+        "info": "Hier kannst du FrankenPHP Worker manuell neu starten, den Cache leeren oder das Theme kompilieren. Alle Aktionen leeren neben dem Shopware-Dateicache auch OPcache und APCu – damit wirken sie wie ein vollständiger Container-Neustart. Diese Aktionen werden bei Plugin-Events (Install, Update, Activate, Deactivate, Uninstall) je nach Konfiguration automatisch ausgeführt.",
         "card": {
             "actions": {
                 "title": "Manuelle Aktionen",
@@ -13,16 +13,16 @@
             }
         },
         "actions": {
-            "signal": "FrankenPHP Signal senden",
+            "signal": "Workers neu starten",
             "fullDeploy": "Full-Deploy ausführen",
-            "cacheRestart": "Cache leeren + Workers neu starten",
-            "cacheRestartHint": "Leert den Shopware-Cache und startet danach die FrankenPHP Workers neu",
+            "cacheRestart": "Cache + Workers neu starten",
+            "cacheRestartHint": "Leert Shopware-Dateicache, OPcache und APCu – startet danach alle FrankenPHP Workers neu. Wirkt wie ein Container-Neustart.",
             "cacheClear": "Cache leeren",
-            "cacheClearHint": "Leert den Shopware-Cache (bin/console cache:clear)",
+            "cacheClearHint": "Leert den Shopware-Dateicache (cache:clear), OPcache und APCu. PHP kompiliert alle Klassen beim nächsten Aufruf neu.",
             "themeCompile": "Theme kompilieren",
-            "themeCompileHint": "Kompiliert alle Themes (bin/console theme:compile) – kann einige Minuten dauern",
+            "themeCompileHint": "Kompiliert alle Themes neu (theme:compile) – kann einige Minuten dauern. Danach empfiehlt sich „Cache + Workers neu starten".",
             "restart": "Workers neu starten",
-            "restartHint": "Startet FrankenPHP Worker graceful neu über die Caddy Admin API"
+            "restartHint": "Leert OPcache und APCu, startet FrankenPHP Workers graceful neu (Caddy Admin API). Wirkt wie ein Container-Neustart."
         },
         "results": {
             "cache": "Cache",
@@ -48,11 +48,11 @@
             }
         },
         "notifications": {
-            "restartSuccess": "FrankenPHP Workers erfolgreich neu gestartet",
+            "restartSuccess": "OPcache geleert und FrankenPHP Workers erfolgreich neu gestartet",
             "restartError": "Fehler beim Neustart der FrankenPHP Workers – Details im Log",
-            "cacheSuccess": "Cache erfolgreich geleert",
+            "cacheSuccess": "Shopware-Cache, OPcache und APCu erfolgreich geleert",
             "cacheError": "Fehler beim Leeren des Caches – Details im Log",
-            "cacheRestartSuccess": "Cache geleert und FrankenPHP Workers neu gestartet",
+            "cacheRestartSuccess": "Cache geleert, OPcache + APCu zurückgesetzt und FrankenPHP Workers neu gestartet",
             "cacheRestartError": "Fehler beim Leeren des Caches oder Neustart der Workers – Details im Log",
             "themeSuccess": "Theme erfolgreich kompiliert",
             "themeError": "Fehler bei der Theme-Kompilierung – Details im Log",

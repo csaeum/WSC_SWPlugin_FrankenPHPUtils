@@ -21,9 +21,12 @@ class FrankenPHPService
 
     /**
      * Startet alle FrankenPHP Worker graceful neu über die Caddy Admin API (natives curl).
+     * Leert vorher OPcache und APCu, damit neue Worker komplett frischen Bytecode laden.
      */
     public function restartWorkers(string $triggeredBy = 'manual'): bool
     {
+        $this->resetPhpCache($triggeredBy);
+
         $url = rtrim((string) $this->getConfig('adminApiUrl', 'http://localhost:2019'), '/');
         $timeout = (int) $this->getConfig('timeout', 5);
 
@@ -65,11 +68,14 @@ class FrankenPHPService
     }
 
     /**
-     * Leert den Shopware-Cache über bin/console cache:clear.
+     * Leert den Shopware-Cache über bin/console cache:clear sowie OPcache und APCu.
      */
     public function clearCache(string $triggeredBy = 'manual'): bool
     {
-        return $this->runConsoleCommand(['cache:clear'], $triggeredBy);
+        $success = $this->runConsoleCommand(['cache:clear'], $triggeredBy);
+        $this->resetPhpCache($triggeredBy);
+
+        return $success;
     }
 
     /**
@@ -167,6 +173,26 @@ class FrankenPHPService
     // -------------------------------------------------------------------------
     // Interne Hilfsmethoden
     // -------------------------------------------------------------------------
+
+    /**
+     * Leert PHP In-Memory-Caches aus dem laufenden Worker-Prozess heraus.
+     * Realpath-Cache, OPcache (shared memory, gilt für alle Worker) und APCu werden zurückgesetzt.
+     * Muss vor dem Caddy Worker-Restart aufgerufen werden, damit neue Worker keinen veralteten Bytecode laden.
+     */
+    private function resetPhpCache(string $triggeredBy): void
+    {
+        clearstatcache(true);
+
+        if (\function_exists('opcache_reset')) {
+            \opcache_reset();
+        }
+
+        if (\function_exists('apcu_clear_cache')) {
+            \apcu_clear_cache();
+        }
+
+        $this->log('info', 'PHP In-Memory-Cache geleert (Realpath-Cache, OPcache, APCu)', ['triggered_by' => $triggeredBy]);
+    }
 
     private function runConsoleCommand(array $command, string $triggeredBy): bool
     {
