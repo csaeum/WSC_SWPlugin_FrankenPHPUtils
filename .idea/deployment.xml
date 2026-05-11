@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="Live-CraftingBay" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" serverName="Live-Mobirex" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="Live-CraftingBay">
         <serverdata>
           <mappings>
             <mapping deploy="/craftingbay-sw6-frankenphp/volumes/html/custom/plugins/WSC_SWPlugin_FrankenPHPUtils" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="Live-Mobirex">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/mobirex-sw6-frankenphp/volumes/html/custom/plugins/wsc_swplugin_frankenphputils" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

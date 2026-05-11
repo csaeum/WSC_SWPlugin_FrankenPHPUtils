@@ -1,0 +1,8 @@
+.claude/ export-ignore
+.gitlab/ export-ignore
+tests/ export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+AGENT.md export-ignore
+CLAUDE.md export-ignore
+phpunit.xml export-ignore
