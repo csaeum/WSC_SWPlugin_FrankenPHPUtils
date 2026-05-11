@@ -16,7 +16,7 @@ class FrankenPHPApiController
     }
 
     /**
-     * Startet FrankenPHP Worker neu.
+     * Löscht var/cache, führt cache:warmup aus, leert OPcache und startet Workers neu.
      */
     #[Route(
         path: '/api/wsc-frankenphp/restart',
@@ -28,7 +28,7 @@ class FrankenPHPApiController
         $success = $this->frankenPHPService->restartWorkers('admin_manual');
 
         return new JsonResponse([
-            'success' => $success,
+            'success'    => $success,
             'messageKey' => $success
                 ? 'wsc-frankenphp-utils.notifications.restartSuccess'
                 : 'wsc-frankenphp-utils.notifications.restartError',

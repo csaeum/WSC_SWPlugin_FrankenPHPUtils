@@ -9,15 +9,15 @@
         <sw-button
             variant="primary"
             :isLoading="isLoadingRestart"
-            :disabled="isLoadingFullDeploy || isLoadingCacheRestart || isLoadingRestart || isLoadingCache || isLoadingTheme"
+            :disabled="isLoadingRestart || isLoadingFullDeploy"
             @click="onRestartWorkers">
             <sw-icon name="regular-power-btn" small/>
-            {{ $tc('wsc-frankenphp-utils.actions.signal') }}
+            {{ $tc('wsc-frankenphp-utils.actions.restart') }}
         </sw-button>
         <sw-button
             variant="primary"
             :isLoading="isLoadingFullDeploy"
-            :disabled="isLoadingFullDeploy || isLoadingCacheRestart || isLoadingRestart || isLoadingCache || isLoadingTheme"
+            :disabled="isLoadingRestart || isLoadingFullDeploy"
             @click="onFullDeploy">
             <sw-icon name="regular-sync" small/>
             {{ $tc('wsc-frankenphp-utils.actions.fullDeploy') }}
@@ -33,6 +33,39 @@
             <sw-alert variant="info">
                 {{ $tc('wsc-frankenphp-utils.info') }}
             </sw-alert>
+            {% endblock %}
+
+            {% block wsc_frankenphp_utils_index_card_result %}
+            <sw-alert
+                v-if="lastResult"
+                :variant="lastResult.success ? 'success' : 'error'"
+                :closable="true"
+                @close="lastResult = null">
+                {{ lastResult.message }}
+                <template v-if="lastResult.results">
+                    <br>
+                    <small>
+                        {{ $tc('wsc-frankenphp-utils.results.cache') }}: {{ lastResult.results.cacheClear ? '✓' : '✗' }} &nbsp;|&nbsp;
+                        <template v-if="lastResult.results.themeCompile !== undefined">
+                            {{ $tc('wsc-frankenphp-utils.results.theme') }}: {{ lastResult.results.themeCompile ? '✓' : '✗' }} &nbsp;|&nbsp;
+                        </template>
+                        {{ $tc('wsc-frankenphp-utils.results.restart') }}: {{ lastResult.results.restart ? '✓' : '✗' }}
+                    </small>
+                </template>
+            </sw-alert>
+            {% endblock %}
+
+            {% block wsc_frankenphp_utils_index_card_actions %}
+            <sw-card :title="$tc('wsc-frankenphp-utils.card.actions.title')">
+                <div class="wsc-frankenphp-utils__action-info">
+                    <h3>{{ $tc('wsc-frankenphp-utils.actions.restart') }}</h3>
+                    <p>{{ $tc('wsc-frankenphp-utils.actions.restartHint') }}</p>
+                </div>
+                <div class="wsc-frankenphp-utils__action-info">
+                    <h3>{{ $tc('wsc-frankenphp-utils.actions.fullDeploy') }}</h3>
+                    <p>{{ $tc('wsc-frankenphp-utils.actions.fullDeployHint') }}</p>
+                </div>
+            </sw-card>
             {% endblock %}
 
             {% block wsc_frankenphp_utils_index_card_status %}
@@ -59,97 +92,6 @@
                 <sw-alert v-else variant="info">
                     {{ $tc('wsc-frankenphp-utils.status.empty') }}
                 </sw-alert>
-            </sw-card>
-            {% endblock %}
-
-            {% block wsc_frankenphp_utils_index_card_result %}
-            <sw-alert
-                v-if="lastResult"
-                :variant="lastResult.success ? 'success' : 'error'"
-                :closable="true"
-                @close="lastResult = null">
-                {{ lastResult.message }}
-                <template v-if="lastResult.results">
-                    <br>
-                    <small>
-                        {{ $tc('wsc-frankenphp-utils.results.cache') }}: {{ lastResult.results.cacheClear ? '✓' : '✗' }} &nbsp;|&nbsp;
-                        <template v-if="lastResult.results.themeCompile !== undefined">
-                            {{ $tc('wsc-frankenphp-utils.results.theme') }}: {{ lastResult.results.themeCompile ? '✓' : '✗' }} &nbsp;|&nbsp;
-                        </template>
-                        {{ $tc('wsc-frankenphp-utils.results.restart') }}: {{ lastResult.results.restart ? '✓' : '✗' }}
-                    </small>
-                </template>
-            </sw-alert>
-            {% endblock %}
-
-            {% block wsc_frankenphp_utils_index_card_actions %}
-            <sw-card :title="$tc('wsc-frankenphp-utils.card.actions.title')">
-                <p class="wsc-frankenphp-utils__description">
-                    {{ $tc('wsc-frankenphp-utils.card.actions.description') }}
-                </p>
-                <div class="wsc-frankenphp-utils__actions">
-
-                    <div class="wsc-frankenphp-utils__action-item">
-                        <sw-button
-                            variant="primary"
-                            size="small"
-                            :isLoading="isLoadingCacheRestart"
-                            :disabled="isLoadingCacheRestart || isLoadingFullDeploy || isLoadingCache || isLoadingRestart || isLoadingTheme"
-                            @click="onClearCacheAndRestart">
-                            <sw-icon name="regular-sync" small/>
-                            {{ $tc('wsc-frankenphp-utils.actions.cacheRestart') }}
-                        </sw-button>
-                        <p class="wsc-frankenphp-utils__action-hint">
-                            {{ $tc('wsc-frankenphp-utils.actions.cacheRestartHint') }}
-                        </p>
-                    </div>
-
-                    <div class="wsc-frankenphp-utils__action-item">
-                        <sw-button
-                            variant="primary"
-                            size="small"
-                            :isLoading="isLoadingCache"
-                            :disabled="isLoadingCache || isLoadingFullDeploy || isLoadingCacheRestart || isLoadingRestart || isLoadingTheme"
-                            @click="onClearCache">
-                            <sw-icon name="regular-sync" small/>
-                            {{ $tc('wsc-frankenphp-utils.actions.cacheClear') }}
-                        </sw-button>
-                        <p class="wsc-frankenphp-utils__action-hint">
-                            {{ $tc('wsc-frankenphp-utils.actions.cacheClearHint') }}
-                        </p>
-                    </div>
-
-                    <div class="wsc-frankenphp-utils__action-item">
-                        <sw-button
-                            variant="primary"
-                            size="small"
-                            :isLoading="isLoadingTheme"
-                            :disabled="isLoadingTheme || isLoadingFullDeploy || isLoadingCacheRestart || isLoadingRestart || isLoadingCache"
-                            @click="onCompileTheme">
-                            <sw-icon name="regular-palette" small/>
-                            {{ $tc('wsc-frankenphp-utils.actions.themeCompile') }}
-                        </sw-button>
-                        <p class="wsc-frankenphp-utils__action-hint">
-                            {{ $tc('wsc-frankenphp-utils.actions.themeCompileHint') }}
-                        </p>
-                    </div>
-
-                    <div class="wsc-frankenphp-utils__action-item">
-                        <sw-button
-                            variant="primary"
-                            size="small"
-                            :isLoading="isLoadingRestart"
-                            :disabled="isLoadingRestart || isLoadingFullDeploy || isLoadingCacheRestart || isLoadingCache || isLoadingTheme"
-                            @click="onRestartWorkers">
-                            <sw-icon name="regular-power-btn" small/>
-                            {{ $tc('wsc-frankenphp-utils.actions.restart') }}
-                        </sw-button>
-                        <p class="wsc-frankenphp-utils__action-hint">
-                            {{ $tc('wsc-frankenphp-utils.actions.restartHint') }}
-                        </p>
-                    </div>
-
-                </div>
             </sw-card>
             {% endblock %}
 

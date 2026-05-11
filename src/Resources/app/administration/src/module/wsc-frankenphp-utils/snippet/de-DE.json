@@ -2,27 +2,20 @@
     "wsc-frankenphp-utils": {
         "title": "WSC FrankenPHP Utils",
         "description": "FrankenPHP Worker-Management und Cache-Steuerung",
-        "info": "Hier kannst du FrankenPHP Worker manuell neu starten, den Cache leeren oder das Theme kompilieren. Alle Aktionen leeren neben dem Shopware-Dateicache auch OPcache – damit wirken sie wie ein vollständiger Container-Neustart. Diese Aktionen werden bei Plugin-Events (Install, Update, Activate, Deactivate, Uninstall) je nach Konfiguration automatisch ausgeführt.",
+        "info": "Dieses Plugin automatisiert den FrankenPHP Worker-Neustart bei Plugin-Events (Install, Update, Activate, Deactivate, Uninstall). Beide Aktionen löschen immer den kompletten var/cache-Ordner, führen cache:warmup aus und leeren OPcache – was einem vollständigen Container-Neustart entspricht.",
         "card": {
             "actions": {
-                "title": "Manuelle Aktionen",
-                "description": "Führe einzelne Aktionen manuell aus oder nutze Full-Deploy (oben rechts) für alles auf einmal."
+                "title": "Was machen die Buttons?"
             },
             "status": {
                 "title": "Letzter FrankenPHP Utils Status"
             }
         },
         "actions": {
-            "signal": "Workers neu starten",
-            "fullDeploy": "Full-Deploy ausführen",
-            "cacheRestart": "Cache + Workers neu starten",
-            "cacheRestartHint": "Leert Shopware-Dateicache und OPcache – startet danach alle FrankenPHP Workers neu. Wirkt wie ein Container-Neustart.",
-            "cacheClear": "Cache leeren",
-            "cacheClearHint": "Leert den Shopware-Dateicache (cache:clear) und OPcache. PHP kompiliert alle Klassen beim nächsten Aufruf neu.",
-            "themeCompile": "Theme kompilieren",
-            "themeCompileHint": "Kompiliert alle Themes neu (theme:compile) – kann einige Minuten dauern. Danach empfiehlt sich „Cache + Workers neu starten".",
             "restart": "Workers neu starten",
-            "restartHint": "Leert OPcache, startet FrankenPHP Workers graceful neu (Caddy Admin API). Wirkt wie ein Container-Neustart."
+            "restartHint": "Löscht den kompletten var/cache-Ordner (inkl. kompilierten Container), führt cache:warmup aus, leert OPcache und startet alle FrankenPHP Workers graceful neu. Entspricht einem vollständigen Container-Neustart.",
+            "fullDeploy": "Full-Deploy",
+            "fullDeployHint": "Wie „Workers neu starten" – führt zusätzlich vorher bin/console theme:compile aus. Sinnvoll nach Theme-Änderungen."
         },
         "results": {
             "cache": "Cache",
@@ -40,22 +33,15 @@
             "results": "Ergebnis",
             "errorDetails": "Fehlerdetails",
             "actions": {
-                "restart": "FrankenPHP Restart",
-                "cacheClearRestart": "Cache leeren + Restart",
+                "restart": "Workers neu starten",
                 "fullDeploy": "Full-Deploy",
-                "cacheClear": "Cache leeren",
-                "themeCompile": "Theme kompilieren"
+                "cacheWarmup": "cache:warmup",
+                "themeCompile": "theme:compile"
             }
         },
         "notifications": {
-            "restartSuccess": "OPcache geleert und FrankenPHP Workers neu gestartet",
-            "restartError": "Fehler beim Neustart der FrankenPHP Workers – Details im Log",
-            "cacheSuccess": "Shopware-Cache und OPcache erfolgreich geleert",
-            "cacheError": "Fehler beim Leeren des Caches – Details im Log",
-            "cacheRestartSuccess": "Cache und OPcache geleert, FrankenPHP Workers neu gestartet",
-            "cacheRestartError": "Fehler beim Leeren des Caches oder Neustart der Workers – Details im Log",
-            "themeSuccess": "Theme erfolgreich kompiliert",
-            "themeError": "Fehler bei der Theme-Kompilierung – Details im Log",
+            "restartSuccess": "var/cache geleert, OPcache zurückgesetzt und Workers neu gestartet",
+            "restartError": "Fehler beim Worker-Neustart – Details im Log",
             "fullDeploySuccess": "Full-Deploy erfolgreich abgeschlossen",
             "fullDeployError": "Full-Deploy mit Fehlern abgeschlossen – Details im Log"
         }

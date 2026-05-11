@@ -2,27 +2,20 @@
     "wsc-frankenphp-utils": {
         "title": "WSC FrankenPHP Utils",
         "description": "FrankenPHP worker management and cache control",
-        "info": "Here you can manually restart FrankenPHP workers, clear the cache or compile themes. All actions clear not only the Shopware file cache but also OPcache – making them equivalent to a full container restart. These actions are also executed automatically on plugin events (install, update, activate, deactivate, uninstall) depending on your configuration.",
+        "info": "This plugin automates FrankenPHP worker restarts on plugin events (install, update, activate, deactivate, uninstall). Both actions always delete the entire var/cache directory, run cache:warmup and clear OPcache – equivalent to a full container restart.",
         "card": {
             "actions": {
-                "title": "Manual Actions",
-                "description": "Run individual actions manually or use Full Deploy (top right) for everything at once."
+                "title": "What do the buttons do?"
             },
             "status": {
                 "title": "Latest FrankenPHP Utils status"
             }
         },
         "actions": {
-            "signal": "Restart Workers",
-            "fullDeploy": "Run Full Deploy",
-            "cacheRestart": "Clear cache + restart workers",
-            "cacheRestartHint": "Clears Shopware file cache and OPcache – then restarts all FrankenPHP workers. Equivalent to a container restart.",
-            "cacheClear": "Clear Cache",
-            "cacheClearHint": "Clears the Shopware file cache (cache:clear) and OPcache. PHP recompiles all classes on next request.",
-            "themeCompile": "Compile Theme",
-            "themeCompileHint": "Recompiles all themes (theme:compile) – may take a few minutes. Follow up with \"Clear cache + restart workers\" afterwards.",
             "restart": "Restart Workers",
-            "restartHint": "Clears OPcache, then gracefully restarts FrankenPHP workers (Caddy Admin API). Equivalent to a container restart."
+            "restartHint": "Deletes the entire var/cache directory (including compiled container), runs cache:warmup, clears OPcache and gracefully restarts all FrankenPHP workers. Equivalent to a full container restart.",
+            "fullDeploy": "Full Deploy",
+            "fullDeployHint": "Same as \"Restart Workers\" – additionally runs bin/console theme:compile beforehand. Useful after theme changes."
         },
         "results": {
             "cache": "Cache",
@@ -40,22 +33,15 @@
             "results": "Result",
             "errorDetails": "Error details",
             "actions": {
-                "restart": "FrankenPHP restart",
-                "cacheClearRestart": "Clear cache + restart",
+                "restart": "Restart workers",
                 "fullDeploy": "Full deploy",
-                "cacheClear": "Clear cache",
-                "themeCompile": "Compile theme"
+                "cacheWarmup": "cache:warmup",
+                "themeCompile": "theme:compile"
             }
         },
         "notifications": {
-            "restartSuccess": "OPcache cleared and FrankenPHP workers restarted successfully",
-            "restartError": "Error restarting FrankenPHP workers – check log for details",
-            "cacheSuccess": "Shopware cache and OPcache cleared successfully",
-            "cacheError": "Error clearing cache – check log for details",
-            "cacheRestartSuccess": "Cache and OPcache cleared, FrankenPHP workers restarted",
-            "cacheRestartError": "Error clearing cache or restarting workers – check log for details",
-            "themeSuccess": "Theme compiled successfully",
-            "themeError": "Error compiling theme – check log for details",
+            "restartSuccess": "var/cache cleared, OPcache reset and workers restarted successfully",
+            "restartError": "Error restarting workers – check log for details",
             "fullDeploySuccess": "Full deploy completed successfully",
             "fullDeployError": "Full deploy completed with errors – check log for details"
         }

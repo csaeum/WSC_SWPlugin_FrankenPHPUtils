@@ -12,9 +12,6 @@ Component.register('wsc-frankenphp-utils-index', {
     data() {
         return {
             isLoadingRestart: false,
-            isLoadingCache: false,
-            isLoadingCacheRestart: false,
-            isLoadingTheme: false,
             isLoadingFullDeploy: false,
             lastResult: null,
             lastStatus: null,
@@ -44,48 +41,6 @@ Component.register('wsc-frankenphp-utils-index', {
                 this.showError(this.$tc('wsc-frankenphp-utils.notifications.restartError'));
             } finally {
                 this.isLoadingRestart = false;
-                this.loadStatus();
-            }
-        },
-
-        async onClearCache() {
-            this.isLoadingCache = true;
-            this.lastResult = null;
-            try {
-                const data = await this.callApi('/wsc-frankenphp/cache-clear');
-                this.handleResult(data);
-            } catch (e) {
-                this.showError(this.$tc('wsc-frankenphp-utils.notifications.cacheError'));
-            } finally {
-                this.isLoadingCache = false;
-                this.loadStatus();
-            }
-        },
-
-        async onClearCacheAndRestart() {
-            this.isLoadingCacheRestart = true;
-            this.lastResult = null;
-            try {
-                const data = await this.callApi('/wsc-frankenphp/cache-clear-restart');
-                this.handleResult(data);
-            } catch (e) {
-                this.showError(this.$tc('wsc-frankenphp-utils.notifications.cacheRestartError'));
-            } finally {
-                this.isLoadingCacheRestart = false;
-                this.loadStatus();
-            }
-        },
-
-        async onCompileTheme() {
-            this.isLoadingTheme = true;
-            this.lastResult = null;
-            try {
-                const data = await this.callApi('/wsc-frankenphp/theme-compile');
-                this.handleResult(data);
-            } catch (e) {
-                this.showError(this.$tc('wsc-frankenphp-utils.notifications.themeError'));
-            } finally {
-                this.isLoadingTheme = false;
                 this.loadStatus();
             }
         },
@@ -157,8 +112,6 @@ Component.register('wsc-frankenphp-utils-index', {
                 cacheClear: this.$tc('wsc-frankenphp-utils.results.cache'),
                 themeCompile: this.$tc('wsc-frankenphp-utils.results.theme'),
                 restart: this.$tc('wsc-frankenphp-utils.results.restart'),
-                'cache:clear': this.$tc('wsc-frankenphp-utils.results.cache'),
-                'theme:compile': this.$tc('wsc-frankenphp-utils.results.theme'),
             };
 
             return labels[key] ?? key;
@@ -167,9 +120,8 @@ Component.register('wsc-frankenphp-utils-index', {
         getStatusActionLabel(action) {
             const labels = {
                 restart: this.$tc('wsc-frankenphp-utils.status.actions.restart'),
-                cacheClearRestart: this.$tc('wsc-frankenphp-utils.status.actions.cacheClearRestart'),
                 fullDeploy: this.$tc('wsc-frankenphp-utils.status.actions.fullDeploy'),
-                'cache:clear': this.$tc('wsc-frankenphp-utils.status.actions.cacheClear'),
+                'cache:warmup': this.$tc('wsc-frankenphp-utils.status.actions.cacheWarmup'),
                 'theme:compile': this.$tc('wsc-frankenphp-utils.status.actions.themeCompile'),
             };
 

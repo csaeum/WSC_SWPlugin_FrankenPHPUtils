@@ -2,27 +2,20 @@
     "wsc-frankenphp-utils": {
         "title": "WSC FrankenPHP Utils",
         "description": "Gestion des workers FrankenPHP et du cache",
-        "info": "Ici, vous pouvez redemarrer manuellement les workers FrankenPHP, vider le cache ou compiler les themes. Toutes les actions vident non seulement le cache fichier Shopware mais aussi l'OPcache – ce qui les rend equivalentes a un redemarrage complet du conteneur. Ces actions sont egalement executees automatiquement lors des evenements de plugins (installation, mise a jour, activation, desactivation, desinstallation), selon votre configuration.",
+        "info": "Ce plugin automatise le redemarrage des workers FrankenPHP lors des evenements de plugins (installation, mise a jour, activation, desactivation, desinstallation). Les deux actions suppriment toujours le dossier var/cache complet, executent cache:warmup et vident l'OPcache – equivalent a un redemarrage complet du conteneur.",
         "card": {
             "actions": {
-                "title": "Actions manuelles",
-                "description": "Executez des actions individuelles manuellement ou utilisez le deploiement complet (en haut a droite) pour tout lancer en une seule fois."
+                "title": "Que font les boutons ?"
             },
             "status": {
                 "title": "Dernier statut FrankenPHP Utils"
             }
         },
         "actions": {
-            "signal": "Redemarrer les workers",
-            "fullDeploy": "Executer le deploiement complet",
-            "cacheRestart": "Vider le cache + redemarrer les workers",
-            "cacheRestartHint": "Vide le cache fichier Shopware et l'OPcache – puis redemarre tous les workers FrankenPHP. Equivalent a un redemarrage du conteneur.",
-            "cacheClear": "Vider le cache",
-            "cacheClearHint": "Vide le cache fichier Shopware (cache:clear) et l'OPcache. PHP recompile toutes les classes au prochain appel.",
-            "themeCompile": "Compiler le theme",
-            "themeCompileHint": "Recompile tous les themes (theme:compile) - peut prendre quelques minutes. Effectuez ensuite un \"Vider le cache + redemarrer les workers\".",
             "restart": "Redemarrer les workers",
-            "restartHint": "Vide l'OPcache, puis redemarre proprement les workers FrankenPHP (API Caddy). Equivalent a un redemarrage du conteneur."
+            "restartHint": "Supprime le dossier var/cache complet (y compris le conteneur compile), execute cache:warmup, vide l'OPcache et redemarre proprement tous les workers FrankenPHP. Equivalent a un redemarrage complet du conteneur.",
+            "fullDeploy": "Deploiement complet",
+            "fullDeployHint": "Identique a \"Redemarrer les workers\" – execute en plus bin/console theme:compile au prealable. Utile apres des modifications de theme."
         },
         "results": {
             "cache": "Cache",
@@ -40,22 +33,15 @@
             "results": "Resultat",
             "errorDetails": "Details de l'erreur",
             "actions": {
-                "restart": "Redemarrage FrankenPHP",
-                "cacheClearRestart": "Vider le cache + redemarrage",
+                "restart": "Redemarrer les workers",
                 "fullDeploy": "Deploiement complet",
-                "cacheClear": "Vider le cache",
-                "themeCompile": "Compiler le theme"
+                "cacheWarmup": "cache:warmup",
+                "themeCompile": "theme:compile"
             }
         },
         "notifications": {
-            "restartSuccess": "OPcache vide et workers FrankenPHP redemarres avec succes",
-            "restartError": "Erreur lors du redemarrage des workers FrankenPHP - consultez le journal pour plus de details",
-            "cacheSuccess": "Cache Shopware et OPcache vides avec succes",
-            "cacheError": "Erreur lors du vidage du cache - consultez le journal pour plus de details",
-            "cacheRestartSuccess": "Cache et OPcache vides, workers FrankenPHP redemarres",
-            "cacheRestartError": "Erreur lors du vidage du cache ou du redemarrage des workers - consultez le journal pour plus de details",
-            "themeSuccess": "Theme compile avec succes",
-            "themeError": "Erreur lors de la compilation du theme - consultez le journal pour plus de details",
+            "restartSuccess": "var/cache vide, OPcache reinitialise et workers redemarres avec succes",
+            "restartError": "Erreur lors du redemarrage des workers - consultez le journal pour plus de details",
             "fullDeploySuccess": "Deploiement complet termine avec succes",
             "fullDeployError": "Deploiement complet termine avec des erreurs - consultez le journal pour plus de details"
         }
