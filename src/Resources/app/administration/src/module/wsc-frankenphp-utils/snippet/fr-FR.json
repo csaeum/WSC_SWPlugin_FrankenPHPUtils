@@ -2,7 +2,7 @@
     "wsc-frankenphp-utils": {
         "title": "WSC FrankenPHP Utils",
         "description": "Gestion des workers FrankenPHP et du cache",
-        "info": "Ici, vous pouvez redemarrer manuellement les workers FrankenPHP, vider le cache ou compiler les themes. Toutes les actions vident non seulement le cache fichier Shopware mais aussi l'OPcache et APCu – ce qui les rend equivalentes a un redemarrage complet du conteneur. Ces actions sont egalement executees automatiquement lors des evenements de plugins (installation, mise a jour, activation, desactivation, desinstallation), selon votre configuration.",
+        "info": "Ici, vous pouvez redemarrer manuellement les workers FrankenPHP, vider le cache ou compiler les themes. Toutes les actions vident non seulement le cache fichier Shopware mais aussi l'OPcache – ce qui les rend equivalentes a un redemarrage complet du conteneur. Ces actions sont egalement executees automatiquement lors des evenements de plugins (installation, mise a jour, activation, desactivation, desinstallation), selon votre configuration.",
         "card": {
             "actions": {
                 "title": "Actions manuelles",
@@ -16,13 +16,13 @@
             "signal": "Redemarrer les workers",
             "fullDeploy": "Executer le deploiement complet",
             "cacheRestart": "Vider le cache + redemarrer les workers",
-            "cacheRestartHint": "Vide le cache fichier Shopware, l'OPcache et APCu – puis redemarre tous les workers FrankenPHP. Equivalent a un redemarrage du conteneur.",
+            "cacheRestartHint": "Vide le cache fichier Shopware et l'OPcache – puis redemarre tous les workers FrankenPHP. Equivalent a un redemarrage du conteneur.",
             "cacheClear": "Vider le cache",
-            "cacheClearHint": "Vide le cache fichier Shopware (cache:clear), l'OPcache et APCu. PHP recompile toutes les classes au prochain appel.",
+            "cacheClearHint": "Vide le cache fichier Shopware (cache:clear) et l'OPcache. PHP recompile toutes les classes au prochain appel.",
             "themeCompile": "Compiler le theme",
             "themeCompileHint": "Recompile tous les themes (theme:compile) - peut prendre quelques minutes. Effectuez ensuite un \"Vider le cache + redemarrer les workers\".",
             "restart": "Redemarrer les workers",
-            "restartHint": "Vide l'OPcache et APCu, puis redemarre proprement les workers FrankenPHP (API Caddy). Equivalent a un redemarrage du conteneur."
+            "restartHint": "Vide l'OPcache, puis redemarre proprement les workers FrankenPHP (API Caddy). Equivalent a un redemarrage du conteneur."
         },
         "results": {
             "cache": "Cache",
@@ -50,9 +50,9 @@
         "notifications": {
             "restartSuccess": "OPcache vide et workers FrankenPHP redemarres avec succes",
             "restartError": "Erreur lors du redemarrage des workers FrankenPHP - consultez le journal pour plus de details",
-            "cacheSuccess": "Cache Shopware, OPcache et APCu vides avec succes",
+            "cacheSuccess": "Cache Shopware et OPcache vides avec succes",
             "cacheError": "Erreur lors du vidage du cache - consultez le journal pour plus de details",
-            "cacheRestartSuccess": "Cache vide, OPcache + APCu reinitialises et workers FrankenPHP redemarres",
+            "cacheRestartSuccess": "Cache et OPcache vides, workers FrankenPHP redemarres",
             "cacheRestartError": "Erreur lors du vidage du cache ou du redemarrage des workers - consultez le journal pour plus de details",
             "themeSuccess": "Theme compile avec succes",
             "themeError": "Erreur lors de la compilation du theme - consultez le journal pour plus de details",

@@ -176,8 +176,10 @@ class FrankenPHPService
 
     /**
      * Leert PHP In-Memory-Caches aus dem laufenden Worker-Prozess heraus.
-     * Realpath-Cache, OPcache (shared memory, gilt für alle Worker) und APCu werden zurückgesetzt.
-     * Muss vor dem Caddy Worker-Restart aufgerufen werden, damit neue Worker keinen veralteten Bytecode laden.
+     * Realpath-Cache und OPcache (shared memory, gilt für alle Worker) werden zurückgesetzt.
+     * APCu wird bewusst NICHT geleert: apcu_clear_cache() mitten in einem aktiven HTTP-Request
+     * löscht auch Laufzeit-Daten anderer Worker (Plugin-Bundle-Registry, Snippet-Cache), was
+     * zu fehlenden Admin-Snippets führt. OPcache-Reset allein löst das Bytecode-Staleness-Problem.
      */
     private function resetPhpCache(string $triggeredBy): void
     {
@@ -187,11 +189,7 @@ class FrankenPHPService
             \opcache_reset();
         }
 
-        if (\function_exists('apcu_clear_cache')) {
-            \apcu_clear_cache();
-        }
-
-        $this->log('info', 'PHP In-Memory-Cache geleert (Realpath-Cache, OPcache, APCu)', ['triggered_by' => $triggeredBy]);
+        $this->log('info', 'PHP In-Memory-Cache geleert (Realpath-Cache, OPcache)', ['triggered_by' => $triggeredBy]);
     }
 
     private function runConsoleCommand(array $command, string $triggeredBy): bool
