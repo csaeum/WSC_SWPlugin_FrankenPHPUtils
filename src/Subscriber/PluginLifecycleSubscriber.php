@@ -71,16 +71,15 @@ class PluginLifecycleSubscriber implements EventSubscriberInterface
 
     private function handleLifecycleEvent(string $triggeredBy): void
     {
-        if ($this->frankenPHPService->isAutoCacheClearEnabled()) {
-            $this->frankenPHPService->clearCache('plugin_event:' . $triggeredBy);
-        }
-
         if ($this->frankenPHPService->isAutoThemeCompileEnabled()) {
             $this->frankenPHPService->compileTheme('plugin_event:' . $triggeredBy);
         }
 
         if ($this->frankenPHPService->isAutoRestartEnabled()) {
+            // restartWorkers() löscht var/cache intern – kein separates clearCache() nötig
             $this->frankenPHPService->restartWorkers('plugin_event:' . $triggeredBy);
+        } elseif ($this->frankenPHPService->isAutoCacheClearEnabled()) {
+            $this->frankenPHPService->clearCache('plugin_event:' . $triggeredBy);
         }
     }
 }

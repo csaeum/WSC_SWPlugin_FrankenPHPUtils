@@ -2,27 +2,20 @@
     "wsc-frankenphp-utils": {
         "title": "WSC FrankenPHP Utils",
         "description": "FrankenPHP worker management and cache control",
-        "info": "Here you can manually restart FrankenPHP workers, clear the cache or compile themes. These actions are also executed automatically on plugin events (install, update, activate, deactivate, uninstall) depending on your configuration.",
+        "info": "This plugin automates FrankenPHP worker restarts on plugin events (install, update, activate, deactivate, uninstall). Both actions always delete the entire var/cache directory, run cache:warmup, clear all cache pools (incl. Redis) and clear OPcache – equivalent to a full container restart.",
         "card": {
             "actions": {
-                "title": "Manual Actions",
-                "description": "Run individual actions manually or use Full Deploy (top right) for everything at once."
+                "title": "What do the buttons do?"
             },
             "status": {
                 "title": "Latest FrankenPHP Utils status"
             }
         },
         "actions": {
-            "signal": "Send FrankenPHP signal",
-            "fullDeploy": "Run Full Deploy",
-            "cacheRestart": "Clear cache + restart workers",
-            "cacheRestartHint": "Clears the Shopware cache and then restarts the FrankenPHP workers",
-            "cacheClear": "Clear Cache",
-            "cacheClearHint": "Clears the Shopware cache (bin/console cache:clear)",
-            "themeCompile": "Compile Theme",
-            "themeCompileHint": "Compiles all themes (bin/console theme:compile) – may take a few minutes",
             "restart": "Restart Workers",
-            "restartHint": "Gracefully restarts FrankenPHP workers via the Caddy Admin API"
+            "restartHint": "Deletes the entire var/cache directory (including compiled container), runs cache:warmup, clears all cache pools (incl. Redis TagAware), clears OPcache and gracefully restarts all FrankenPHP workers. Equivalent to a full container restart.",
+            "fullDeploy": "Full Deploy",
+            "fullDeployHint": "Same as \"Restart Workers\" – additionally runs bin/console theme:compile beforehand. Useful after theme changes."
         },
         "results": {
             "cache": "Cache",
@@ -40,22 +33,15 @@
             "results": "Result",
             "errorDetails": "Error details",
             "actions": {
-                "restart": "FrankenPHP restart",
-                "cacheClearRestart": "Clear cache + restart",
+                "restart": "Restart workers",
                 "fullDeploy": "Full deploy",
-                "cacheClear": "Clear cache",
-                "themeCompile": "Compile theme"
+                "cacheWarmup": "cache:warmup",
+                "themeCompile": "theme:compile"
             }
         },
         "notifications": {
-            "restartSuccess": "FrankenPHP workers restarted successfully",
-            "restartError": "Error restarting FrankenPHP workers – check log for details",
-            "cacheSuccess": "Cache cleared successfully",
-            "cacheError": "Error clearing cache – check log for details",
-            "cacheRestartSuccess": "Cache cleared and FrankenPHP workers restarted",
-            "cacheRestartError": "Error clearing cache or restarting workers – check log for details",
-            "themeSuccess": "Theme compiled successfully",
-            "themeError": "Error compiling theme – check log for details",
+            "restartSuccess": "var/cache cleared, OPcache reset and workers restarted successfully",
+            "restartError": "Error restarting workers – check log for details",
             "fullDeploySuccess": "Full deploy completed successfully",
             "fullDeployError": "Full deploy completed with errors – check log for details"
         }

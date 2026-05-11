@@ -4,6 +4,7 @@ namespace WSC\WSC_SWPlugin_FrankenPHPUtils\Service;
 
 use Psr\Log\LoggerInterface;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 class FrankenPHPService
@@ -20,56 +21,38 @@ class FrankenPHPService
     }
 
     /**
-     * Startet alle FrankenPHP Worker graceful neu über die Caddy Admin API (natives curl).
-     */
-    public function restartWorkers(string $triggeredBy = 'manual'): bool
-    {
-        $url = rtrim((string) $this->getConfig('adminApiUrl', 'http://localhost:2019'), '/');
-        $timeout = (int) $this->getConfig('timeout', 5);
-
-        try {
-            $ch = curl_init($url . '/frankenphp/workers/restart');
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-            $responseBody = (string) curl_exec($ch);
-            $statusCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            $curlError = curl_error($ch);
-            curl_close($ch);
-
-            if ($curlError !== '') {
-                throw new \RuntimeException($curlError);
-            }
-
-            $success = $statusCode === 200;
-
-            $this->log(
-                $success ? 'info' : 'error',
-                $success
-                    ? 'FrankenPHP Workers erfolgreich neu gestartet'
-                    : 'FrankenPHP Worker-Neustart fehlgeschlagen (HTTP ' . $statusCode . ')',
-                ['triggered_by' => $triggeredBy, 'url' => $url, 'http_status' => $statusCode, 'response' => $responseBody]
-            );
-            $this->writeStatus('restart', $triggeredBy, $success, ['restart' => $success]);
-
-            return $success;
-        } catch (\Throwable $e) {
-            $this->log('error', 'FrankenPHP Worker-Neustart Exception: ' . $e->getMessage(), [
-                'triggered_by' => $triggeredBy,
-                'url' => $url,
-            ]);
-            $this->writeStatus('restart', $triggeredBy, false, ['restart' => false], $e->getMessage());
-
-            return false;
-        }
-    }
-
-    /**
-     * Leert den Shopware-Cache über bin/console cache:clear.
+     * Vollständiger Cache-Reset in drei Schritten:
+     * 1. var/cache löschen (inkl. kompilierten Container-Ordner prod_<hash>)
+     * 2. cache:warmup – kompilierten Container neu erzeugen
+     * 3. cache:pool:clear --all – alle konfigurierten Cache-Pools leeren (inkl. Redis TagAware)
+     * 4. OPcache und Realpath-Cache leeren
+     *
+     * Zuverlässiger als cache:clear, das in FrankenPHP-Mode den prod_<hash>-Ordner
+     * nicht immer vollständig entfernt und Redis-Pools nicht berücksichtigt.
      */
     public function clearCache(string $triggeredBy = 'manual'): bool
     {
-        return $this->runConsoleCommand(['cache:clear'], $triggeredBy);
+        $cacheDir = $this->projectDir . '/var/cache';
+
+        try {
+            $filesystem = new Filesystem();
+            if ($filesystem->exists($cacheDir)) {
+                $filesystem->remove($cacheDir);
+                $this->log('info', 'var/cache gelöscht', ['triggered_by' => $triggeredBy]);
+            }
+        } catch (\Throwable $e) {
+            $this->log('error', 'var/cache konnte nicht gelöscht werden: ' . $e->getMessage(), ['triggered_by' => $triggeredBy]);
+        }
+
+        // Container neu erzeugen bevor cache:pool:clear läuft (braucht den Container für Pool-Konfiguration)
+        $success = $this->runConsoleCommand(['cache:warmup'], $triggeredBy);
+
+        // Alle Symfony Cache-Pools leeren – inkl. Redis TagAware
+        $this->runConsoleCommand(['cache:pool:clear', '--all'], $triggeredBy);
+
+        $this->resetPhpCache($triggeredBy);
+
+        return $success;
     }
 
     /**
@@ -81,8 +64,18 @@ class FrankenPHPService
     }
 
     /**
-     * Full-Deploy: Cache leeren → Theme kompilieren → Worker neu starten.
-     * Gibt Array mit Einzelergebnissen zurück.
+     * Löscht var/cache, führt cache:warmup aus, leert OPcache und startet Workers neu.
+     * Entspricht einem vollständigen Container-Neustart.
+     */
+    public function restartWorkers(string $triggeredBy = 'manual'): bool
+    {
+        $this->clearCache($triggeredBy);
+
+        return $this->sendRestartSignal($triggeredBy);
+    }
+
+    /**
+     * Full-Deploy: var/cache löschen → cache:warmup → Theme kompilieren → Workers neu starten.
      *
      * @return array{cacheClear: bool, themeCompile: bool, restart: bool}
      */
@@ -96,31 +89,10 @@ class FrankenPHPService
 
         $results['cacheClear'] = $this->clearCache($triggeredBy);
         $results['themeCompile'] = $this->compileTheme($triggeredBy);
-        $results['restart'] = $this->restartWorkers($triggeredBy);
+        $results['restart'] = $this->sendRestartSignal($triggeredBy);
 
         $this->log('info', 'Full-Deploy abgeschlossen', array_merge($results, ['triggered_by' => $triggeredBy]));
         $this->writeStatus('fullDeploy', $triggeredBy, !in_array(false, $results, true), $results);
-
-        return $results;
-    }
-
-    /**
-     * Cache leeren und anschliessend Worker neu starten.
-     *
-     * @return array{cacheClear: bool, restart: bool}
-     */
-    public function runCacheClearAndRestart(string $triggeredBy = 'manual'): array
-    {
-        $results = [
-            'cacheClear' => false,
-            'restart'    => false,
-        ];
-
-        $results['cacheClear'] = $this->clearCache($triggeredBy);
-        $results['restart'] = $this->restartWorkers($triggeredBy);
-
-        $this->log('info', 'Cache-Clear und Worker-Restart abgeschlossen', array_merge($results, ['triggered_by' => $triggeredBy]));
-        $this->writeStatus('cacheClearRestart', $triggeredBy, !in_array(false, $results, true), $results);
 
         return $results;
     }
@@ -167,6 +139,71 @@ class FrankenPHPService
     // -------------------------------------------------------------------------
     // Interne Hilfsmethoden
     // -------------------------------------------------------------------------
+
+    /**
+     * Sendet den Restart-Signal an die Caddy Admin API.
+     * Wird intern von restartWorkers() und runFullDeploy() genutzt, damit
+     * clearCache() nicht doppelt aufgerufen wird.
+     */
+    private function sendRestartSignal(string $triggeredBy): bool
+    {
+        $url = rtrim((string) $this->getConfig('adminApiUrl', 'http://localhost:2019'), '/');
+        $timeout = (int) $this->getConfig('timeout', 5);
+
+        try {
+            $ch = curl_init($url . '/frankenphp/workers/restart');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+            $responseBody = (string) curl_exec($ch);
+            $statusCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $curlError = curl_error($ch);
+            curl_close($ch);
+
+            if ($curlError !== '') {
+                throw new \RuntimeException($curlError);
+            }
+
+            $success = $statusCode === 200;
+
+            $this->log(
+                $success ? 'info' : 'error',
+                $success
+                    ? 'FrankenPHP Workers erfolgreich neu gestartet'
+                    : 'FrankenPHP Worker-Neustart fehlgeschlagen (HTTP ' . $statusCode . ')',
+                ['triggered_by' => $triggeredBy, 'url' => $url, 'http_status' => $statusCode, 'response' => $responseBody]
+            );
+            $this->writeStatus('restart', $triggeredBy, $success, ['restart' => $success]);
+
+            return $success;
+        } catch (\Throwable $e) {
+            $this->log('error', 'FrankenPHP Worker-Neustart Exception: ' . $e->getMessage(), [
+                'triggered_by' => $triggeredBy,
+                'url'          => $url,
+            ]);
+            $this->writeStatus('restart', $triggeredBy, false, ['restart' => false], $e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
+     * Leert PHP In-Memory-Caches aus dem laufenden Worker-Prozess heraus.
+     * Realpath-Cache und OPcache (shared memory, gilt für alle Worker) werden zurückgesetzt.
+     * APCu wird bewusst NICHT geleert: apcu_clear_cache() mitten in einem aktiven HTTP-Request
+     * löscht auch Laufzeit-Daten anderer Worker (Plugin-Bundle-Registry, Snippet-Cache), was
+     * zu fehlenden Admin-Snippets führt. OPcache-Reset allein löst das Bytecode-Staleness-Problem.
+     */
+    private function resetPhpCache(string $triggeredBy): void
+    {
+        clearstatcache(true);
+
+        if (\function_exists('opcache_reset')) {
+            \opcache_reset();
+        }
+
+        $this->log('info', 'PHP In-Memory-Cache geleert (Realpath-Cache, OPcache)', ['triggered_by' => $triggeredBy]);
+    }
 
     private function runConsoleCommand(array $command, string $triggeredBy): bool
     {
@@ -262,12 +299,12 @@ class FrankenPHPService
         }
 
         $status = [
-            'createdAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
-            'action' => $action,
+            'createdAt'   => (new \DateTimeImmutable())->format(DATE_ATOM),
+            'action'      => $action,
             'triggeredBy' => $triggeredBy,
-            'success' => $success,
-            'results' => $results,
-            'error' => $error,
+            'success'     => $success,
+            'results'     => $results,
+            'error'       => $error,
         ];
 
         @file_put_contents(
