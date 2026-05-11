@@ -2,7 +2,7 @@
     "wsc-frankenphp-utils": {
         "title": "WSC FrankenPHP Utils",
         "description": "FrankenPHP Worker-Management und Cache-Steuerung",
-        "info": "Dieses Plugin automatisiert den FrankenPHP Worker-Neustart bei Plugin-Events (Install, Update, Activate, Deactivate, Uninstall). Beide Aktionen löschen immer den kompletten var/cache-Ordner, führen cache:warmup aus und leeren OPcache – was einem vollständigen Container-Neustart entspricht.",
+        "info": "Dieses Plugin automatisiert den FrankenPHP Worker-Neustart bei Plugin-Events (Install, Update, Activate, Deactivate, Uninstall). Beide Aktionen löschen immer den kompletten var/cache-Ordner, führen cache:warmup aus, leeren alle Cache-Pools (inkl. Redis) und leeren OPcache – was einem vollständigen Container-Neustart entspricht.",
         "card": {
             "actions": {
                 "title": "Was machen die Buttons?"
@@ -13,9 +13,9 @@
         },
         "actions": {
             "restart": "Workers neu starten",
-            "restartHint": "Löscht den kompletten var/cache-Ordner (inkl. kompilierten Container), führt cache:warmup aus, leert OPcache und startet alle FrankenPHP Workers graceful neu. Entspricht einem vollständigen Container-Neustart.",
+            "restartHint": "Löscht den kompletten var/cache-Ordner (inkl. kompilierten Container), führt cache:warmup aus, leert alle Cache-Pools (inkl. Redis TagAware), leert OPcache und startet alle FrankenPHP Workers graceful neu. Entspricht einem vollständigen Container-Neustart.",
             "fullDeploy": "Full-Deploy",
-            "fullDeployHint": "Wie „Workers neu starten" – führt zusätzlich vorher bin/console theme:compile aus. Sinnvoll nach Theme-Änderungen."
+            "fullDeployHint": "Wie „Workers neu starten\" – führt zusätzlich vorher bin/console theme:compile aus. Sinnvoll nach Theme-Änderungen."
         },
         "results": {
             "cache": "Cache",

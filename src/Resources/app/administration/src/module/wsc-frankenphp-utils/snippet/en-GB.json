@@ -2,7 +2,7 @@
     "wsc-frankenphp-utils": {
         "title": "WSC FrankenPHP Utils",
         "description": "FrankenPHP worker management and cache control",
-        "info": "This plugin automates FrankenPHP worker restarts on plugin events (install, update, activate, deactivate, uninstall). Both actions always delete the entire var/cache directory, run cache:warmup and clear OPcache – equivalent to a full container restart.",
+        "info": "This plugin automates FrankenPHP worker restarts on plugin events (install, update, activate, deactivate, uninstall). Both actions always delete the entire var/cache directory, run cache:warmup, clear all cache pools (incl. Redis) and clear OPcache – equivalent to a full container restart.",
         "card": {
             "actions": {
                 "title": "What do the buttons do?"
@@ -13,7 +13,7 @@
         },
         "actions": {
             "restart": "Restart Workers",
-            "restartHint": "Deletes the entire var/cache directory (including compiled container), runs cache:warmup, clears OPcache and gracefully restarts all FrankenPHP workers. Equivalent to a full container restart.",
+            "restartHint": "Deletes the entire var/cache directory (including compiled container), runs cache:warmup, clears all cache pools (incl. Redis TagAware), clears OPcache and gracefully restarts all FrankenPHP workers. Equivalent to a full container restart.",
             "fullDeploy": "Full Deploy",
             "fullDeployHint": "Same as \"Restart Workers\" – additionally runs bin/console theme:compile beforehand. Useful after theme changes."
         },

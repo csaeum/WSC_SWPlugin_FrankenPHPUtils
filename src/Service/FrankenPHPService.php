@@ -21,9 +21,14 @@ class FrankenPHPService
     }
 
     /**
-     * Löscht var/cache direkt (inkl. kompilierten Container-Ordner), führt cache:warmup aus
-     * und leert OPcache. Zuverlässiger als cache:clear, das in FrankenPHP-Mode den
-     * prod_<hash>-Ordner nicht immer vollständig entfernt.
+     * Vollständiger Cache-Reset in drei Schritten:
+     * 1. var/cache löschen (inkl. kompilierten Container-Ordner prod_<hash>)
+     * 2. cache:warmup – kompilierten Container neu erzeugen
+     * 3. cache:pool:clear --all – alle konfigurierten Cache-Pools leeren (inkl. Redis TagAware)
+     * 4. OPcache und Realpath-Cache leeren
+     *
+     * Zuverlässiger als cache:clear, das in FrankenPHP-Mode den prod_<hash>-Ordner
+     * nicht immer vollständig entfernt und Redis-Pools nicht berücksichtigt.
      */
     public function clearCache(string $triggeredBy = 'manual'): bool
     {
@@ -39,7 +44,12 @@ class FrankenPHPService
             $this->log('error', 'var/cache konnte nicht gelöscht werden: ' . $e->getMessage(), ['triggered_by' => $triggeredBy]);
         }
 
+        // Container neu erzeugen bevor cache:pool:clear läuft (braucht den Container für Pool-Konfiguration)
         $success = $this->runConsoleCommand(['cache:warmup'], $triggeredBy);
+
+        // Alle Symfony Cache-Pools leeren – inkl. Redis TagAware
+        $this->runConsoleCommand(['cache:pool:clear', '--all'], $triggeredBy);
+
         $this->resetPhpCache($triggeredBy);
 
         return $success;
