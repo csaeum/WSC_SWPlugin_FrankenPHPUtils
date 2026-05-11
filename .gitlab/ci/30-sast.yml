@@ -4,3 +4,9 @@ include:
 
 variables:
   SAST_EXCLUDED_PATHS: "vendor/, tests/"
+
+sast:
+  stage: security
+
+dependency_scanning:
+  stage: security

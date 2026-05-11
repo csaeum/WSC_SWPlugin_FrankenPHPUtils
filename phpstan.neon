@@ -1,9 +1,23 @@
 parameters:
+    level: 8
+    paths:
+        - src
+    excludePaths:
+        - src/Resources/app
+        - src/Resources/public
     ignoreErrors:
         - '#Class Shopware\\.*not found#'
-        - '#Class Symfony\\.*not found#'
-        - '#Class Doctrine\\.*not found#'
-        - '#Class Psr\\.*not found#'
+        - '#[Cc]lass Symfony\\.*not found#'
+        - '#[Cc]lass Doctrine\\.*not found#'
+        - '#[Cc]lass Psr\\.*not found#'
         - '#Interface Symfony\\.*not found#'
         - '#Trait Shopware\\.*not found#'
+        - '#has invalid return type Symfony\\.*#'
+        - '#Attribute class Symfony\\.*does not exist#'
+        - '#no value type specified in iterable type array#'
+        - '#generic class Shopware\\.*EntityRepository.*does not specify its types#'
+        - '#Call to an undefined method Shopware\\.*Entity::getId\(\)#'
+        - '#Strict comparison using .* non-falsy-string will always evaluate to false#'
     reportUnmatchedIgnoredErrors: false
+    scanFiles:
+        - stubs/shopware.php

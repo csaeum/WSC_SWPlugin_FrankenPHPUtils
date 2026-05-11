@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace WSC\WSC_SWPlugin_FrankenPHPUtils\Controller\Api;
 
@@ -28,7 +30,7 @@ class FrankenPHPApiController
         $success = $this->frankenPHPService->restartWorkers('admin_manual');
 
         return new JsonResponse([
-            'success'    => $success,
+            'success' => $success,
             'messageKey' => $success
                 ? 'wsc-frankenphp-utils.notifications.restartSuccess'
                 : 'wsc-frankenphp-utils.notifications.restartError',
@@ -81,13 +83,12 @@ class FrankenPHPApiController
     )]
     public function cacheClearRestart(Context $context): JsonResponse
     {
-        $results = $this->frankenPHPService->runCacheClearAndRestart('admin_manual');
-        $allSuccess = !in_array(false, $results, true);
+        $success = $this->frankenPHPService->restartWorkers('admin_manual');
 
         return new JsonResponse([
-            'success' => $allSuccess,
-            'results' => $results,
-            'messageKey' => $allSuccess
+            'success' => $success,
+            'results' => ['cacheClear' => $success, 'restart' => $success],
+            'messageKey' => $success
                 ? 'wsc-frankenphp-utils.notifications.cacheRestartSuccess'
                 : 'wsc-frankenphp-utils.notifications.cacheRestartError',
         ]);

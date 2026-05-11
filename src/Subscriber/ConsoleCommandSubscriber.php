@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace WSC\WSC_SWPlugin_FrankenPHPUtils\Subscriber;
 
@@ -29,12 +31,12 @@ class ConsoleCommandSubscriber implements EventSubscriberInterface
 
     public function onConsoleTerminate(ConsoleTerminateEvent $event): void
     {
-        if (getenv('WSC_FRANKENPHP_INTERNAL') === '1') {
+        if ('1' === getenv('WSC_FRANKENPHP_INTERNAL')) {
             return;
         }
 
         $commandName = $event->getCommand()?->getName();
-        if ($commandName === null || !in_array($commandName, self::WATCHED_COMMANDS, true)) {
+        if (null === $commandName || !in_array($commandName, self::WATCHED_COMMANDS, true)) {
             return;
         }
 

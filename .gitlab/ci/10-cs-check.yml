@@ -1,5 +1,5 @@
-phpstan:
-  stage: security
+cs-check:
+  stage: quality
   image: php:8.4-cli
   variables:
     COMPOSER_ALLOW_SUPERUSER: "1"
@@ -8,10 +8,10 @@ phpstan:
     - apt-get update && apt-get install -y --no-install-recommends git unzip libzip-dev
     - docker-php-ext-install zip
     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-    - mkdir -p /tmp/phpstan-tools
-    - composer require --working-dir=/tmp/phpstan-tools phpstan/phpstan --no-interaction --no-progress --ignore-platform-reqs
+    - mkdir -p /tmp/cs-tools
+    - composer require --working-dir=/tmp/cs-tools friendsofphp/php-cs-fixer --no-interaction --no-progress
   script:
-    - /tmp/phpstan-tools/vendor/bin/phpstan analyse --no-progress --configuration=phpstan.neon
+    - /tmp/cs-tools/vendor/bin/php-cs-fixer fix --dry-run --diff src/
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_COMMIT_TAG =~ /^v.*/

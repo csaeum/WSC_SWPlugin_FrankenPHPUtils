@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace WSC\WSC_SWPlugin_FrankenPHPUtils\Service;
 
@@ -82,9 +84,9 @@ class FrankenPHPService
     public function runFullDeploy(string $triggeredBy = 'manual'): array
     {
         $results = [
-            'cacheClear'   => false,
+            'cacheClear' => false,
             'themeCompile' => false,
-            'restart'      => false,
+            'restart' => false,
         ];
 
         $results['cacheClear'] = $this->clearCache($triggeredBy);
@@ -108,7 +110,7 @@ class FrankenPHPService
         }
 
         $contents = file_get_contents($statusPath);
-        if ($contents === false) {
+        if (false === $contents) {
             return null;
         }
 
@@ -152,6 +154,10 @@ class FrankenPHPService
 
         try {
             $ch = curl_init($url . '/frankenphp/workers/restart');
+            if (false === $ch) {
+                throw new \RuntimeException('curl_init failed');
+            }
+
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
@@ -160,11 +166,11 @@ class FrankenPHPService
             $curlError = curl_error($ch);
             curl_close($ch);
 
-            if ($curlError !== '') {
+            if ('' !== $curlError) {
                 throw new \RuntimeException($curlError);
             }
 
-            $success = $statusCode === 200;
+            $success = 200 === $statusCode;
 
             $this->log(
                 $success ? 'info' : 'error',
@@ -179,7 +185,7 @@ class FrankenPHPService
         } catch (\Throwable $e) {
             $this->log('error', 'FrankenPHP Worker-Neustart Exception: ' . $e->getMessage(), [
                 'triggered_by' => $triggeredBy,
-                'url'          => $url,
+                'url' => $url,
             ]);
             $this->writeStatus('restart', $triggeredBy, false, ['restart' => false], $e->getMessage());
 
@@ -223,7 +229,7 @@ class FrankenPHPService
                     : 'Konsolenbefehl fehlgeschlagen: ' . implode(' ', $command),
                 [
                     'triggered_by' => $triggeredBy,
-                    'output'       => $success ? $process->getOutput() : $process->getErrorOutput(),
+                    'output' => $success ? $process->getOutput() : $process->getErrorOutput(),
                 ]
             );
             $this->writeStatus($command[0] ?? 'console', $triggeredBy, $success, [$command[0] ?? 'console' => $success]);
@@ -250,7 +256,7 @@ class FrankenPHPService
     {
         $phpBinary = PHP_BINARY;
 
-        if ($phpBinary === '' || str_contains(basename($phpBinary), 'frankenphp')) {
+        if ('' === $phpBinary || str_contains(basename($phpBinary), 'frankenphp')) {
             return ['frankenphp', 'php-cli', $consolePath];
         }
 
@@ -264,9 +270,9 @@ class FrankenPHPService
         }
 
         match ($level) {
-            'error'   => $this->logger->error('[WSC_FrankenPHPUtils] ' . $message, $context),
+            'error' => $this->logger->error('[WSC_FrankenPHPUtils] ' . $message, $context),
             'warning' => $this->logger->warning('[WSC_FrankenPHPUtils] ' . $message, $context),
-            default   => $this->logger->info('[WSC_FrankenPHPUtils] ' . $message, $context),
+            default => $this->logger->info('[WSC_FrankenPHPUtils] ' . $message, $context),
         };
         $this->writePluginLog($level, $message, $context);
     }
@@ -278,9 +284,9 @@ class FrankenPHPService
             return;
         }
 
-        $contextJson = $context !== [] ? ' ' . json_encode($context, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : '';
+        $contextJson = [] !== $context ? ' ' . json_encode($context, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : '';
         $line = sprintf(
-            "[%s] %s: %s%s%s",
+            '[%s] %s: %s%s%s',
             (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
             strtoupper($level),
             $message,
@@ -299,12 +305,12 @@ class FrankenPHPService
         }
 
         $status = [
-            'createdAt'   => (new \DateTimeImmutable())->format(DATE_ATOM),
-            'action'      => $action,
+            'createdAt' => (new \DateTimeImmutable())->format(DATE_ATOM),
+            'action' => $action,
             'triggeredBy' => $triggeredBy,
-            'success'     => $success,
-            'results'     => $results,
-            'error'       => $error,
+            'success' => $success,
+            'results' => $results,
+            'error' => $error,
         ];
 
         @file_put_contents(

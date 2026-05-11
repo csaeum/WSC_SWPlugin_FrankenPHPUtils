@@ -5,7 +5,7 @@ stages:
   - release
 
 include:
-  - local: .gitlab/ci/10-codesniffer.yml
+  - local: .gitlab/ci/10-cs-check.yml
   - local: .gitlab/ci/20-phpstan.yml
   - local: .gitlab/ci/30-sast.yml
   - local: .gitlab/ci/99-zip.yml

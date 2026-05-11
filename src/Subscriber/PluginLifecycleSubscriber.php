@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace WSC\WSC_SWPlugin_FrankenPHPUtils\Subscriber;
 
@@ -22,11 +24,11 @@ class PluginLifecycleSubscriber implements EventSubscriberInterface
     {
         return array_merge(
             [
-                PluginPostInstallEvent::class    => 'onPluginPostInstall',
-                PluginPostActivateEvent::class   => 'onPluginPostActivate',
+                PluginPostInstallEvent::class => 'onPluginPostInstall',
+                PluginPostActivateEvent::class => 'onPluginPostActivate',
                 PluginPostDeactivateEvent::class => 'onPluginPostDeactivate',
-                PluginPostUninstallEvent::class  => 'onPluginPostUninstall',
-                PluginPostUpdateEvent::class     => 'onPluginPostUpdate',
+                PluginPostUninstallEvent::class => 'onPluginPostUninstall',
+                PluginPostUpdateEvent::class => 'onPluginPostUpdate',
             ],
             class_exists(ThemeCopyToLiveEvent::class)
                 ? [ThemeCopyToLiveEvent::class => 'onThemeCopyToLive']
