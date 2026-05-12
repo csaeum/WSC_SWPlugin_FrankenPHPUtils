@@ -8,7 +8,7 @@ build-zip:
   script:
     - PLUGIN_NAME=$(basename "$CI_PROJECT_DIR")
     - ZIP_NAME="${PLUGIN_NAME}.zip"
-    - git archive --format=zip --prefix="${PLUGIN_NAME}/" "${CI_COMMIT_TAG}" -o "/tmp/${ZIP_NAME}"
+    - git archive --format=zip --prefix="${PLUGIN_NAME}/" "${CI_COMMIT_TAG}" composer.json src/ -o "/tmp/${ZIP_NAME}"
     - cp "/tmp/${ZIP_NAME}" .
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_COMMIT_TAG"
