@@ -1,3 +1,13 @@
+# WSC | sw-plugins - WSC_SWPlugin_FrankenPHPUtils
+
+<div align="center">
+
+| ![Shopware](https://img.shields.io/badge/Shopware-6.7-189EFF?logo=shopware&logoColor=white) | ![License](https://img.shields.io/badge/License-GPL%20v3-green.svg) | ![GitHub release](https://img.shields.io/github/v/release/csaeum/WSC_SWPlugin_FrankenPHPUtils) |
+|:---:|:---:|:---:|
+
+</div>
+
+---
 ## WSC | FrankenPHP Utils
 
 Shopware 6 Plugin zur automatischen Verwaltung von FrankenPHP-Workern bei Plugin-Lifecycle-Events und Cache-Operationen.
@@ -127,3 +137,23 @@ cp public/bundles/wscswpluginfrankenphputils/administration/assets/*.js \
 cp -r public/bundles/wscswpluginfrankenphputils/administration/.vite \
    custom/plugins/WSC_SWPlugin_FrankenPHPUtils/src/Resources/public/administration/
 ```
+---
+
+## 👨‍💻 Über den Autor
+
+**Christian Säum** – Technical E-Commerce Developer & SEO Consultant
+
+<div align="center">
+
+| ☕ Support | 🌐 Website | 💼 LinkedIn | 📘 Facebook | 📸 Instagram |
+|:---:|:---:|:---:|:---:|:---:|
+| [Buy me a Coffee](https://buymeacoffee.com/csaeum) | [web-seo-consulting.eu](https://web-seo-consulting.eu) | [Christian Säum](https://www.linkedin.com/in/cs%C3%A4um/) | [Facebook](https://www.facebook.com/christian.saeum) | [Instagram](https://www.instagram.com/saumc/) |
+
+</div>
+
+## 📄 Lizenz
+
+Dieses Plugin ist lizenziert unter der [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html).  
+Du darfst es frei verwenden, verändern und weitergeben – unter den gleichen Bedingungen.
+
+© 2026 Christian Säum – [web-seo-consulting.eu](https://web-seo-consulting.eu)
