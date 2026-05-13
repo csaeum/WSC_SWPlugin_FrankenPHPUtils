@@ -46,7 +46,9 @@ sync-to-github:
       -H "Content-Type: application/json" \
       -d "{\"tag_name\":\"${CI_COMMIT_TAG}\",\"name\":\"${CI_COMMIT_TAG}\",\"body\":\"Release ${CI_COMMIT_TAG}\"}" \
       "https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/releases")
+    echo "GitHub Response: $RELEASE_RESPONSE"
     RELEASE_ID=$(echo "$RELEASE_RESPONSE" | grep -o '"id":[0-9]*' | head -1 | grep -o '[0-9]*')
+    echo "Release ID: $RELEASE_ID"
     curl -s -X POST \
       -H "Authorization: token ${GITHUB_TOKEN}" \
       -H "Content-Type: application/zip" \
