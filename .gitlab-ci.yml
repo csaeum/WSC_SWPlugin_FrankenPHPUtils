@@ -20,8 +20,6 @@ sync-to-github:
     - if: '$CI_COMMIT_TAG'
   script: |
     YEAR=$(date +%Y)
-#    curl --header "PRIVATE-TOKEN:${GITLAB_TOKEN}" "http://gitlab.localdomain/csaeum/dev-templates/-/raw/main/Header.md" -o /tmp/header.md
-#    curl --header "PRIVATE-TOKEN:${GITLAB_TOKEN}" "http://gitlab.localdomain/csaeum/dev-templates/-/raw/main/Footer.md" -o /tmp/footer.md
     curl --header "PRIVATE-TOKEN:${GITLAB_TOKEN}" "${CI_API_V4_URL}/projects/csaeum%2Fdev-templates/repository/files/Header.md/raw?ref=main" -o /tmp/header.md
     curl --header "PRIVATE-TOKEN:${GITLAB_TOKEN}" "${CI_API_V4_URL}/projects/csaeum%2Fdev-templates/repository/files/Footer.md/raw?ref=main" -o /tmp/footer.md
     sed -i "s/\${PLUGIN_NAME}/${CI_PROJECT_NAME}/g" /tmp/header.md
