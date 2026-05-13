@@ -1,10 +1,10 @@
-# WSC | FrankenPHP Utils
+## WSC | FrankenPHP Utils
 
 Shopware 6 Plugin zur automatischen Verwaltung von FrankenPHP-Workern bei Plugin-Lifecycle-Events und Cache-Operationen.
 
 ---
 
-## Hintergrund
+### Hintergrund
 
 FrankenPHP betreibt PHP im **Worker-Mode**: PHP-Prozesse bleiben dauerhaft im Speicher und werden nicht nach jedem Request neu gestartet. Das sorgt für hohe Performance — bringt aber einen entscheidenden Nebeneffekt mit sich.
 
@@ -12,7 +12,7 @@ Wenn Shopware Cache leert, Plugins installiert oder Themes kompiliert, können d
 
 ---
 
-## Voraussetzungen
+### Voraussetzungen
 
 - Shopware 6.6.x oder 6.7.x
 - PHP 8.2+
@@ -21,9 +21,9 @@ Wenn Shopware Cache leert, Plugins installiert oder Themes kompiliert, können d
 
 ---
 
-## Was das Plugin kann
+### Was das Plugin kann
 
-### Automatisch — Plugin-Lifecycle-Events
+#### Automatisch — Plugin-Lifecycle-Events
 
 Bei folgenden Shopware-Events führt das Plugin automatisch die konfigurierten Aktionen aus:
 
@@ -41,7 +41,7 @@ Konfigurierbare Aktionen pro Event (alle einzeln ein-/ausschaltbar):
 - Theme kompilieren (`theme:compile`) — standardmäßig deaktiviert, da zeitintensiv
 - FrankenPHP-Worker neu starten
 
-### Automatisch — Konsolen-Befehle
+#### Automatisch — Konsolen-Befehle
 
 Das Plugin lauscht auf folgende direkt ausgeführte Konsolenbefehle und startet die Worker danach neu:
 
@@ -51,7 +51,7 @@ Das Plugin lauscht auf folgende direkt ausgeführte Konsolenbefehle und startet 
 | `bin/console cache:warmup` | ✅ Funktioniert |
 | `bin/console cache:clear` | ⚠️ Unzuverlässig — siehe bekannte Probleme |
 
-### Manuell — Admin-Panel
+#### Manuell — Admin-Panel
 
 Unter **Erweiterungen → WSC FrankenPHP Utils** stehen folgende Aktionen bereit:
 
@@ -68,7 +68,7 @@ Die Seite zeigt außerdem eine **Status-Karte** mit dem Ergebnis der letzten Akt
 
 ---
 
-## Konfiguration
+### Konfiguration
 
 Einstellungen unter **Einstellungen → Plugins → WSC FrankenPHP Utils**:
 
@@ -83,7 +83,7 @@ Einstellungen unter **Einstellungen → Plugins → WSC FrankenPHP Utils**:
 
 ---
 
-## Logging
+### Logging
 
 Das Plugin schreibt in zwei Dateien:
 
@@ -94,7 +94,7 @@ Das Plugin schreibt in zwei Dateien:
 
 ---
 
-## API-Endpunkte
+### API-Endpunkte
 
 Alle Endpunkte erfordern einen gültigen Shopware API Bearer Token.
 
@@ -109,7 +109,7 @@ Alle Endpunkte erfordern einen gültigen Shopware API Bearer Token.
 
 ---
 
-## Build — Admin-Assets
+### Build — Admin-Assets
 
 Das Plugin enthält ein **vorkompiliertes Vite-Bundle** unter `src/Resources/public/administration/`. Dieses wird bei `assets:install` (z. B. durch Plugin-Aktivierung) automatisch bereitgestellt — kein Node.js auf dem Server erforderlich.
 
@@ -127,9 +127,3 @@ cp public/bundles/wscswpluginfrankenphputils/administration/assets/*.js \
 cp -r public/bundles/wscswpluginfrankenphputils/administration/.vite \
    custom/plugins/WSC_SWPlugin_FrankenPHPUtils/src/Resources/public/administration/
 ```
-
----
-
-## Lizenz
-
-MIT — © Christian Säum, [Web-SEO-Consulting.eu](https://www.Web-SEO-Consulting.eu)
