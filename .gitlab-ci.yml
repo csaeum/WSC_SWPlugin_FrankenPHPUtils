@@ -41,13 +41,18 @@ sync-to-github:
     git add README.md
     git commit -m "chore: add header and footer to README" || true
     git push github HEAD:refs/heads/main --follow-tags --force
-    RELEASE_RESPONSE=$(curl -s -X POST \
+    RELEASE_RESPONSE=$(curl -s \
+    -H "Authorization: token ${GITHUB_TOKEN}" \
+      "https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/releases/tags/${CI_COMMIT_TAG}")
+    RELEASE_ID=$(echo "$RELEASE_RESPONSE" | grep -o '"id":[0-9]*' | head -1 | grep -o '[0-9]*')
+    if [ -z "$RELEASE_ID" ]; then
+      RELEASE_RESPONSE=$(curl -s -X POST \
       -H "Authorization: token ${GITHUB_TOKEN}" \
       -H "Content-Type: application/json" \
       -d "{\"tag_name\":\"${CI_COMMIT_TAG}\",\"name\":\"${CI_COMMIT_TAG}\",\"body\":\"Release ${CI_COMMIT_TAG}\"}" \
-      "https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/releases")
-    echo "GitHub Response: $RELEASE_RESPONSE"
-    RELEASE_ID=$(echo "$RELEASE_RESPONSE" | grep -o '"id":[0-9]*' | head -1 | grep -o '[0-9]*')
+        "https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/releases")
+      RELEASE_ID=$(echo "$RELEASE_RESPONSE" | grep -o '"id":[0-9]*' | head -1 | grep -o '[0-9]*')
+    fi
     echo "Release ID: $RELEASE_ID"
     curl -s -X POST \
       -H "Authorization: token ${GITHUB_TOKEN}" \
