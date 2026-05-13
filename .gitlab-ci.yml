@@ -22,7 +22,8 @@ sync-to-github:
     YEAR=$(date +%Y)
     curl --header "PRIVATE-TOKEN:${GITLAB_TOKEN}" "${CI_API_V4_URL}/projects/csaeum%2Fdev-templates/repository/files/Header.md/raw?ref=main" -o /tmp/header.md
     curl --header "PRIVATE-TOKEN:${GITLAB_TOKEN}" "${CI_API_V4_URL}/projects/csaeum%2Fdev-templates/repository/files/Footer.md/raw?ref=main" -o /tmp/footer.md
-    sed -i "s/\${PLUGIN_NAME}/${CI_PROJECT_NAME}/g" /tmp/header.md
+    sed -i "s/\${PLUGIN_NAME}/${GITHUB_REPO}/g" /tmp/header.md
+    sed -i "s/\${PLUGIN_GRUPPE}/${CI_PROJECT_NAMESPACE}/g" /tmp/header.md
     sed -i "s/\${GITHUB_USER}/${GITHUB_USER}/g" /tmp/header.md
     sed -i "s/\${GITHUB_REPO}/${GITHUB_REPO}/g" /tmp/header.md
     sed -i "s/\${YEAR}/${YEAR}/g" /tmp/footer.md
