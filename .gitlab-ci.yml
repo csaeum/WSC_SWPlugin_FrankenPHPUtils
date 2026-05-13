@@ -15,19 +15,19 @@ sync-to-github:
   stage: deploy
   rules:
     - if: '$CI_COMMIT_TAG'
-  script:
-    - YEAR=$(date +%Y)
-    - curl --header "PRIVATE-TOKEN:${GITLAB_TOKEN}" "http://gitlab.localdomain/csaeum/dev-templates/-/raw/main/Header.md" -o /tmp/header.md
-    - curl --header "PRIVATE-TOKEN:${GITLAB_TOKEN}" "http://gitlab.localdomain/csaeum/dev-templates/-/raw/main/Footer.md" -o /tmp/footer.md
-    - sed -i "s/\${PLUGIN_NAME}/${CI_PROJECT_NAME}/g" /tmp/header.md
-    - sed -i "s/\${GITHUB_USER}/${GITHUB_USER}/g" /tmp/header.md
-    - sed -i "s/\${GITHUB_REPO}/${GITHUB_REPO}/g" /tmp/header.md
-    - sed -i "s/\${YEAR}/${YEAR}/g" /tmp/footer.md
-    - cat /tmp/header.md README.md /tmp/footer.md > /tmp/README_final.md
-    - cp /tmp/README_final.md README.md
-    - git config user.email "ci@gitlab.local"
-    - git config user.name "GitLab CI"
-    - git remote add github https://oauth2:${GITHUB_TOKEN}@github.com/${GITHUB_USER}/${GITHUB_REPO}.git
-    - git add README.md
-    - git commit -m "chore: add header and footer to README" || true
-    - git push github HEAD:main --follow-tags
+  script: |
+    YEAR=$(date +%Y)
+    curl --header "PRIVATE-TOKEN:${GITLAB_TOKEN}" "http://gitlab.localdomain/csaeum/dev-templates/-/raw/main/Header.md" -o /tmp/header.md
+    curl --header "PRIVATE-TOKEN:${GITLAB_TOKEN}" "http://gitlab.localdomain/csaeum/dev-templates/-/raw/main/Footer.md" -o /tmp/footer.md
+    sed -i "s/\${PLUGIN_NAME}/${CI_PROJECT_NAME}/g" /tmp/header.md
+    sed -i "s/\${GITHUB_USER}/${GITHUB_USER}/g" /tmp/header.md
+    sed -i "s/\${GITHUB_REPO}/${GITHUB_REPO}/g" /tmp/header.md
+    sed -i "s/\${YEAR}/${YEAR}/g" /tmp/footer.md
+    cat /tmp/header.md README.md /tmp/footer.md > /tmp/README_final.md
+    cp /tmp/README_final.md README.md
+    git config user.email "ci@gitlab.local"
+    git config user.name "GitLab CI"
+    git remote add github https://oauth2:${GITHUB_TOKEN}@github.com/${GITHUB_USER}/${GITHUB_REPO}.git
+    git add README.md
+    git commit -m "chore: add header and footer to README" || true
+    git push github HEAD:main --follow-tags
