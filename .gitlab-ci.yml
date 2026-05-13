@@ -30,6 +30,7 @@ sync-to-github:
     cp /tmp/README_final.md README.md
     git config user.email "ci@gitlab.local"
     git config user.name "GitLab CI"
+    git fetch --unshallow || true
     git remote add github https://oauth2:${GITHUB_TOKEN}@github.com/${GITHUB_USER}/${GITHUB_REPO}.git
     git add README.md
     git commit -m "chore: add header and footer to README" || true
