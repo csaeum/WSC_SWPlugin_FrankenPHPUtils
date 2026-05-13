@@ -34,4 +34,4 @@ sync-to-github:
     git remote add github https://oauth2:${GITHUB_TOKEN}@github.com/${GITHUB_USER}/${GITHUB_REPO}.git
     git add README.md
     git commit -m "chore: add header and footer to README" || true
-    git push github HEAD:refs/heads/main --follow-tags
+    git push github HEAD:refs/heads/main --follow-tags --force
