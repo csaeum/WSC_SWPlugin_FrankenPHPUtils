@@ -45,7 +45,7 @@ sync-to-github:
       -H "Authorization: token ${GITHUB_TOKEN}" \
       "https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/releases/tags/${CI_COMMIT_TAG}")
     echo "GitHub Response: $RELEASE_RESPONSE"
-    RELEASE_ID=$(echo "$RELEASE_RESPONSE" | grep -o '"id":[0-9]*' | head -1 | grep -o '[0-9]*')
+    RELEASE_ID=$(echo "$RELEASE_RESPONSE" | grep -o '"id": *[0-9]*' | head -1 | grep -o '[0-9]*')
     if [ -z "$RELEASE_ID" ]; then
       RELEASE_RESPONSE=$(curl -s -X POST \
         -H "Authorization: token ${GITHUB_TOKEN}" \
@@ -53,7 +53,7 @@ sync-to-github:
         -d "{\"tag_name\":\"${CI_COMMIT_TAG}\",\"name\":\"${CI_COMMIT_TAG}\",\"body\":\"Release ${CI_COMMIT_TAG}\"}" \
         "https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/releases")
       echo "GitHub Create Response: $RELEASE_RESPONSE"
-      RELEASE_ID=$(echo "$RELEASE_RESPONSE" | grep -o '"id":[0-9]*' | head -1 | grep -o '[0-9]*')
+      RELEASE_ID=$(echo "$RELEASE_RESPONSE" | grep -o '"id": *[0-9]*' | head -1 | grep -o '[0-9]*')
     fi
     echo "Release ID: $RELEASE_ID"
     if [ -z "$RELEASE_ID" ]; then
